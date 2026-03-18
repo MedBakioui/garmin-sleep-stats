@@ -144,7 +144,8 @@ def load_credentials() -> Optional[Dict[str, str]]:
     if 'GARMIN_EMAIL' in st.secrets and 'GARMIN_PASSWORD' in st.secrets:
         return {
             "email": st.secrets['GARMIN_EMAIL'],
-            "password": st.secrets['GARMIN_PASSWORD']
+            "password": st.secrets['GARMIN_PASSWORD'],
+            "session": st.secrets.get('GARMIN_SESSION')
         }
 
     # 2. Check local file

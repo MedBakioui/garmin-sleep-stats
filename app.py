@@ -49,9 +49,9 @@ check_auth()
 
 # --- FONCTION DE CACHE POUR LE CLIENT GARMIN ---
 @st.cache_resource(show_spinner=False)
-def get_cached_garmin_client(email, password):
+def get_cached_garmin_client(email, password, session_token=None):
     from garmin_client import GarminClient
-    client = GarminClient(email, password)
+    client = GarminClient(email, password, session_token=session_token)
     success, message = client.connect()
     return client, success, message
 
@@ -63,7 +63,7 @@ if 'garmin_client' not in st.session_state:
     if creds and 'auto_login_done' not in st.session_state:
         st.session_state['auto_login_done'] = True
         with st.spinner("Initialisation du profil Garmin..."):
-            client, success, message = get_cached_garmin_client(creds['email'], creds['password'])
+            client, success, message = get_cached_garmin_client(creds['email'], creds['password'], creds.get('session'))
             if success:
                 st.session_state['garmin_client'] = client
                 st.toast("✅ Profil Garmin chargé automatiquement")

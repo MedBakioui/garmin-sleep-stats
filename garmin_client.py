@@ -16,24 +16,36 @@ class GarminClient:
         client (Optional[Garmin]): Instance authentifiée du client Garmin API.
     """
 
-    def __init__(self, email: str, password: str):
+    def __init__(self, email: str, password: str, session_token: Optional[str] = None):
         """Initialise le GarminClient.
 
         Args:
             email (str): Email de connexion.
             password (str): Mot de passe de connexion.
+            session_token (str, optional): Jeton JSON pour éviter le blocage IP.
         """
         self.email = email
         self.password = password
+        self.session_token = session_token
         self.client: Optional[Garmin] = None
 
     def connect(self) -> Tuple[bool, str]:
         """Authentification auprès de Garmin Connect avec persistance de session."""
         import os
+        import json
         session_path = "garmin_session.json"
         
         try:
             self.client = Garmin(self.email, self.password)
+            
+            # Priorité absolue: Session issue des Streamlit Secrets
+            if self.session_token:
+                try:
+                    session_data = json.loads(self.session_token)
+                    self.client.login(token_store=session_data)
+                    return True, "Session restaurée (Secrets)"
+                except Exception as e:
+                    print(f"Erreur lors de la lecture du Secret GARMIN_SESSION : {e}")
             
             # Tentative de chargement d'une session existante
             if os.path.exists(session_path):
