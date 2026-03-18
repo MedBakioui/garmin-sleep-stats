@@ -4,26 +4,67 @@ import datetime
 
 JOURNAL_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sleep_journal.json")
 
+try:
+    import streamlit as st
+    from supabase import create_client, Client
+    SUPABASE_AVAILABLE = True
+except ImportError:
+    SUPABASE_AVAILABLE = False
+
 class JournalManager:
     def __init__(self):
+        # --- SUPABASE CONFIG ---
+        self.supabase: Optional[Client] = None
+        if SUPABASE_AVAILABLE:
+            try:
+                url = st.secrets.get("SUPABASE_URL")
+                key = st.secrets.get("SUPABASE_KEY")
+                if url and key:
+                    self.supabase = create_client(url, key)
+            except:
+                pass
+                
         self.journal = self._load_journal()
 
     def _load_journal(self):
+        local_journal = {}
         if os.path.exists(JOURNAL_FILE):
             try:
                 with open(JOURNAL_FILE, 'r', encoding='utf-8') as f:
-                    return json.load(f)
+                    local_journal = json.load(f)
             except Exception as e:
                 print(f"Erreur chargement journal: {e}")
-                return {}
-        return {}
+        
+        # --- SYNC DEPUIS SUPABASE ---
+        if self.supabase:
+            try:
+                response = self.supabase.table("journal_entries").select("date, content").execute()
+                if response.data:
+                    remote_data = {row['date']: row['content'] for row in response.data}
+                    local_journal.update(remote_data)
+                    # Mise à jour locale
+                    with open(JOURNAL_FILE, 'w', encoding='utf-8') as f:
+                        json.dump(local_journal, f, ensure_ascii=False, indent=2)
+            except Exception as e:
+                print(f"Supabase Journal Load Error: {e}")
+                
+        return local_journal
 
     def _save_journal(self):
+        # Sauvegarde locale
         try:
             with open(JOURNAL_FILE, 'w', encoding='utf-8') as f:
                 json.dump(self.journal, f, ensure_ascii=False, indent=2)
         except Exception as e:
             print(f"Erreur sauvegarde journal: {e}")
+            
+        # Sauvegarde distante (Supabase)
+        if self.supabase:
+            try:
+                to_upsert = [{"date": d, "content": c} for d, c in self.journal.items()]
+                self.supabase.table("journal_entries").upsert(to_upsert).execute()
+            except Exception as e:
+                print(f"Supabase Journal Sync Error: {e}")
 
     def get_entry(self, date_obj: datetime.date):
         """Récupère l'entrée pour une date spécifique."""

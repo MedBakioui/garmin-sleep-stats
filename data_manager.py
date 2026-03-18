@@ -52,7 +52,7 @@ class DataManager:
         
         # --- SYNC DEPUIS SUPABASE ---
         if self.supabase:
-            table_name = "sleep_data" if "sleep_cache" in file_path else "metrics_data"
+            table_name = "sleep_data" if "sleep_cache" in file_path else "daily_metrics"
             try:
                 # On récupère toutes les données de la table
                 response = self.supabase.table(table_name).select("date, content").execute()
@@ -76,7 +76,7 @@ class DataManager:
             
         # Sauvegarde distante (Supabase)
         if self.supabase:
-            table_name = "sleep_data" if "sleep_cache" in file_path else "metrics_data"
+            table_name = "sleep_data" if "sleep_cache" in file_path else "daily_metrics"
             try:
                 # On prépare les données pour un upsert massif
                 to_upsert = [{"date": d, "content": c} for d, c in cache.items()]
