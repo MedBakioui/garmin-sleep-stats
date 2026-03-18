@@ -1,38 +1,60 @@
 import streamlit as st
 
 def render_login():
-    """Affiche la page de connexion épique et gère l'authentification."""
-    
-    # --- CSS ULTRA-PREMIUM EXPERT LOGIN v2 (Biotech Edition) ---
+    """Affiche la page de connexion luxury minimaliste bleue (Version originale)."""
+
     st.markdown("""
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap');
-        
-        /* 1. Fond Animé "Deep Biotech" (Mesh Shift) */
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Josefin+Sans:wght@100;200;300;400&display=swap');
+
+        /* 1. Reset & fond */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         .stApp {
-            background-color: #020617 !important;
-            background-image: 
-                radial-gradient(at 0% 100%, hsla(160,84%,15%,0.3) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(190,90%,20%,0.3) 0, transparent 50%),
-                radial-gradient(at 50% 50%, hsla(210,50%,5%,1) 0, transparent 100%);
-            background-attachment: fixed !important;
-            animation: colorShift 20s ease-in-out infinite alternate !important;
+            background: #03050f !important;
+            font-family: 'Josefin Sans', sans-serif;
         }
-        @keyframes colorShift {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 100% 100%; }
+
+        /* 2. Lumières ambiantes */
+        .stApp::before {
+            content: '';
+            position: fixed;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(59,111,212,0.12) 0%, transparent 70%);
+            top: -200px; left: -200px;
+            pointer-events: none;
+            z-index: 0;
+            animation: drift1 18s ease-in-out infinite alternate;
         }
-        
-        /* 2. Hack pour cacher les éléments parasites de Streamlit */
-        header[data-testid="stHeader"], 
-        #MainMenu, 
-        footer, 
+        .stApp::after {
+            content: '';
+            position: fixed;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(26,58,122,0.1) 0%, transparent 70%);
+            bottom: -150px; right: -100px;
+            pointer-events: none;
+            z-index: 0;
+            animation: drift2 24s ease-in-out infinite alternate;
+        }
+        @keyframes drift1 {
+            0%   { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -20px) scale(1.1); }
+        }
+        @keyframes drift2 {
+            0%   { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-20px, 15px) scale(1.08); }
+        }
+
+        /* 3. Masquer éléments Streamlit */
+        header[data-testid="stHeader"],
+        #MainMenu,
+        footer,
         .stDeployButton,
         [data-testid="stSidebarNav"] {
             display: none !important;
         }
-        
-        /* 3. Centrage Absolu (Flexbox Container) */
+
+        /* 4. Centrage */
         [data-testid="block-container"] {
             padding: 0 !important;
             margin: 0 !important;
@@ -46,137 +68,317 @@ def render_login():
             z-index: 10;
         }
 
-        /* 4. La Carte "Carbon Glass" Expert */
+        /* 5. La carte */
         .login-card {
-            background: rgba(8, 15, 25, 0.7);
-            backdrop-filter: blur(45px) saturate(180%);
-            -webkit-backdrop-filter: blur(45px) saturate(180%);
-            border-radius: 28px;
-            border: 1px solid rgba(0, 255, 200, 0.1);
-            border-top: 1px solid rgba(0, 255, 255, 0.2);
-            padding: 4rem 3rem;
+            position: relative;
             width: 100%;
-            max-width: 440px;
-            box-shadow: 
-                0 40px 100px -20px rgba(0, 0, 0, 0.9),
-                0 0 20px -5px rgba(0, 255, 200, 0.1);
-            text-align: center;
-            animation: emerge 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            max-width: 420px;
+            padding: 3.5rem 2.8rem 3rem;
+            background: rgba(6, 10, 28, 0.78);
+            border: 0.5px solid rgba(91, 142, 230, 0.18);
+            border-top: 0.5px solid rgba(91, 142, 230, 0.45);
+            border-radius: 2px;
+            backdrop-filter: blur(60px);
+            -webkit-backdrop-filter: blur(60px);
+            animation: cardReveal 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             opacity: 0;
-            transform: translateY(30px) scale(0.98);
-        }
-        
-        @keyframes emerge {
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            transform: translateY(40px);
+            overflow: hidden;
         }
 
-        /* 5. Typographie "Chrome & Emerald" */
+        @keyframes cardReveal {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Ligne dorée haut */
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 10%; right: 10%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #5b8ee6, transparent);
+            opacity: 0.5;
+        }
+
+        /* Scan de lumière */
+        .login-card::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -60%;
+            width: 40%; height: 200%;
+            background: linear-gradient(to right, transparent, rgba(91,142,230,0.03), transparent);
+            transform: skewX(-20deg);
+            animation: scanLight 8s ease-in-out infinite;
+        }
+        @keyframes scanLight {
+            0%, 100% { left: -60%; opacity: 0; }
+            20%       { opacity: 1; }
+            40%       { left: 160%; opacity: 0; }
+            41%, 99%  { left: -60%; opacity: 0; }
+        }
+
+        /* Coins décoratifs */
+        .corner {
+            position: absolute;
+            width: 12px; height: 12px;
+            border-color: rgba(91, 142, 230, 0.25);
+            border-style: solid;
+        }
+        .corner-tl { top: 12px; left: 12px; border-width: 0.5px 0 0 0.5px; }
+        .corner-tr { top: 12px; right: 12px; border-width: 0.5px 0.5px 0 0; }
+        .corner-bl { bottom: 12px; left: 12px; border-width: 0 0 0.5px 0.5px; }
+        .corner-br { bottom: 12px; right: 12px; border-width: 0 0.5px 0.5px 0; }
+
+        /* 6. Header */
+        .login-logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.8rem;
+        }
+        .login-logo-mark {
+            width: 44px; height: 44px;
+            border: 0.5px solid rgba(91, 142, 230, 0.35);
+            border-radius: 2px;
+            position: relative;
+            animation: logoFade 1.8s ease forwards;
+            opacity: 0;
+        }
+        .login-logo-mark::before {
+            content: '';
+            position: absolute;
+            width: 14px; height: 0.5px;
+            background: rgba(91, 142, 230, 0.6);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .login-logo-mark::after {
+            content: '';
+            position: absolute;
+            width: 0.5px; height: 14px;
+            background: rgba(91, 142, 230, 0.6);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        @keyframes logoFade { to { opacity: 1; } }
+
         .login-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.6rem;
-            font-weight: 900;
-            color: #ffffff;
-            margin-bottom: 0.3rem;
-            letter-spacing: -2px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 300;
+            color: #dce8fa;
+            letter-spacing: 0.12em;
             line-height: 1;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            animation: textReveal 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+            opacity: 0;
+            transform: translateY(12px);
         }
         .login-title span {
-            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
-        }
-        
-        .login-subtitle {
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.8rem;
-            color: #4ade80; /* Vert émeraude biotech */
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            margin-bottom: 3.5rem;
-            font-weight: 700;
-            opacity: 0.9;
+            color: #5b8ee6;
+            font-weight: 400;
         }
 
-        /* 6. Le Champ de Texte "Void Input" */
+        .login-subtitle {
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 200;
+            color: rgba(91, 142, 230, 0.55);
+            letter-spacing: 0.45em;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 0;
+            animation: textReveal 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        @keyframes textReveal {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 7. Séparateur */
+        .login-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 2.5rem 0;
+            animation: textReveal 1.6s ease 0.5s forwards;
+            opacity: 0;
+        }
+        .divider-line {
+            flex: 1; height: 0.5px;
+            background: linear-gradient(to right, transparent, rgba(91, 142, 230, 0.2));
+        }
+        .divider-line-r {
+            background: linear-gradient(to left, transparent, rgba(91, 142, 230, 0.2));
+        }
+        .divider-dot {
+            width: 3px; height: 3px;
+            border-radius: 50%;
+            background: rgba(91, 142, 230, 0.4);
+        }
+
+        /* 8. Label input */
+        .input-label-custom {
+            display: block;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 300;
+            letter-spacing: 0.35em;
+            color: rgba(91, 142, 230, 0.5);
+            text-transform: uppercase;
+            margin-bottom: 0.7rem;
+            animation: textReveal 1.6s ease 0.55s forwards;
+            opacity: 0;
+        }
+
+        /* 9. Input Streamlit override */
         div[data-baseweb="input"] {
-            background: rgba(0, 0, 0, 0.6) !important;
-            border: 1px solid rgba(0, 255, 200, 0.05) !important;
-            border-radius: 14px !important;
-            padding: 8px 12px !important;
-            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+            background: rgba(91, 142, 230, 0.03) !important;
+            border: 0.5px solid rgba(91, 142, 230, 0.12) !important;
+            border-bottom: 0.5px solid rgba(91, 142, 230, 0.3) !important;
+            border-radius: 0 !important;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            animation: textReveal 1.6s ease 0.6s forwards;
+            opacity: 0;
         }
         div[data-baseweb="input"]:focus-within {
-            background: rgba(0, 5, 10, 0.95) !important;
-            border-color: #00f2fe !important;
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.1) !important;
+            background: rgba(91, 142, 230, 0.05) !important;
+            border-color: rgba(91, 142, 230, 0.4) !important;
+            border-bottom-color: #5b8ee6 !important;
+            box-shadow: none !important;
         }
         div[data-baseweb="input"] input {
-            color: #e2e8f0 !important;
-            font-family: 'Outfit', sans-serif !important;
-            font-size: 1.4rem !important;
-            letter-spacing: 10px !important;
+            color: #dce8fa !important;
+            font-family: 'Josefin Sans', sans-serif !important;
+            font-size: 1rem !important;
+            font-weight: 200 !important;
+            letter-spacing: 0.5em !important;
             text-align: center !important;
-            font-weight: 800 !important;
+            padding: 14px 16px !important;
         }
         div[data-baseweb="input"] input::placeholder {
-            color: #1e293b !important;
-            letter-spacing: 3px !important;
+            color: rgba(91, 142, 230, 0.2) !important;
+            letter-spacing: 0.3em !important;
+            font-size: 0.65rem !important;
         }
         div[data-baseweb="input"] svg { display: none !important; }
 
-        /* 7. Le Bouton "Electric Emerald" */
-        div[data-testid="stButton"] button {
-            background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
-            background-size: 200% auto !important;
-            color: #030014 !important; /* Texte sombre pour contraste expert */
-            border: none !important;
-            padding: 1.3rem !important;
-            border-radius: 14px !important;
-            font-family: 'Outfit', sans-serif !important;
-            font-weight: 900 !important;
-            font-size: 1.1rem !important;
-            letter-spacing: 3px !important;
-            text-transform: uppercase !important;
-            width: 100% !important;
+        /* 10. Bouton — aligné à droite, largeur auto */
+        div[data-testid="stButton"] {
+            display: flex !important;
+            justify-content: flex-end !important;
             margin-top: 2rem !important;
-            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-            box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.5) !important;
+            animation: textReveal 1.6s ease 0.75s forwards;
+            opacity: 0;
+        }
+        div[data-testid="stButton"] button {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            width: auto !important;
+            padding: 11px 20px !important;
+            background: transparent !important;
+            border: 0.5px solid rgba(91, 142, 230, 0.3) !important;
+            border-radius: 0 !important;
+            color: #5b8ee6 !important;
+            font-family: 'Josefin Sans', sans-serif !important;
+            font-size: 0.85rem !important;
+            font-weight: 300 !important;
+            letter-spacing: 0.2em !important;
+            text-transform: uppercase !important;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            box-shadow: none !important;
+            position: relative;
+            overflow: hidden;
+        }
+        div[data-testid="stButton"] button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #5b8ee6;
+            transform: translateX(101%);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        div[data-testid="stButton"] button:hover::before {
+            transform: translateX(0) !important;
         }
         div[data-testid="stButton"] button:hover {
-            background-position: right center !important;
-            transform: translateY(-5px) scale(1.02) !important;
-            box-shadow: 0 30px 50px -15px rgba(16, 185, 129, 0.7) !important;
-            letter-spacing: 4px !important;
+            color: #03050f !important;
         }
-        
-        /* 8. Error Override Apex */
+        div[data-testid="stButton"] button p::after {
+            content: ' →';
+        }
+
+        /* 11. Footer */
+        .login-footer {
+            text-align: center;
+            margin-top: 2.2rem;
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 0.55rem;
+            letter-spacing: 0.3em;
+            color: rgba(91, 142, 230, 0.18);
+            text-transform: uppercase;
+            animation: textReveal 1.6s ease 0.9s forwards;
+            opacity: 0;
+        }
+
+        /* 12. Alerte erreur */
         [data-testid="stAlert"] {
-            background: rgba(220, 38, 38, 0.05) !important;
-            border: 1px solid rgba(220, 38, 38, 0.3) !important;
-            color: #ef4444 !important;
-            border-radius: 14px !important;
-            font-weight: 600 !important;
+            background-color: rgba(180, 50, 50, 0.05) !important;
+            border: 0.5px solid rgba(180, 50, 50, 0.2) !important;
+            border-radius: 0 !important;
+            color: rgba(220, 100, 100, 0.8) !important;
+            font-family: 'Josefin Sans', sans-serif !important;
+            font-size: 0.65rem !important;
+            letter-spacing: 0.25em !important;
+            text-transform: uppercase !important;
+            margin-top: 1rem !important;
+            box-shadow: none !important;
+            backdrop-filter: blur(10px);
         }
         </style>
     """, unsafe_allow_html=True)
 
-    # --- HTML STRUCTURE ---
+    # Structure HTML de la carte
     st.markdown("""
         <div class="login-card">
-            <div class="login-title">Garmin <span>Vault</span></div>
-            <div class="login-subtitle">SECURE DATA INTERFACE</div>
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+
+            <div class="login-logo">
+                <div class="login-logo-mark"></div>
+            </div>
+            <div class="login-title">Garmin <span>Stats</span></div>
+            <div class="login-subtitle">Biohacking Central</div>
+
+            <div class="login-divider">
+                <div class="divider-line"></div>
+                <div class="divider-dot"></div>
+                <div class="divider-line divider-line-r"></div>
+            </div>
+
+            <div class="input-label-custom">Code d'accès sécurisé</div>
     """, unsafe_allow_html=True)
-    
-    # --- LOGIQUE ---
-    entered_code = st.text_input("Auth", type="password", placeholder="CODE D'ACCÈS", label_visibility="collapsed")
-    
-    st.markdown('<div style="height: 10px;"></div>', unsafe_allow_html=True)
-    if st.button("INITIALISER LA CONNEXION", type="primary", use_container_width=True):
+
+    entered_code = st.text_input(
+        "Code",
+        type="password",
+        placeholder="• • • • • • • •",
+        label_visibility="collapsed"
+    )
+
+    if st.button("Déverrouiller"):
         if entered_code == st.secrets.get('ACCESS_CODE', ''):
             st.session_state['authenticated'] = True
             st.rerun()
         else:
-            st.error("ACCÈS RÉVOQUÉ")
-            
-    st.markdown("</div>", unsafe_allow_html=True)
+            st.error("ACCÈS NON AUTORISÉ")
+
+    st.markdown("""
+            <div class="login-footer">Système sécurisé · Accès restreint</div>
+        </div>
+    """, unsafe_allow_html=True)
