@@ -1,0 +1,762 @@
+{
+    "2026-02-10": {
+        "date": "2026-02-10",
+        "steps": 5115,
+        "rhr": 57,
+        "stress_avg": 40,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-11": {
+        "date": "2026-02-11",
+        "steps": 8283,
+        "rhr": 59,
+        "stress_avg": 58,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-12": {
+        "date": "2026-02-12",
+        "steps": 7930,
+        "rhr": 58,
+        "stress_avg": 43,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-13": {
+        "date": "2026-02-13",
+        "steps": 5741,
+        "rhr": 57,
+        "stress_avg": 32,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-14": {
+        "date": "2026-02-14",
+        "steps": 15691,
+        "rhr": 63,
+        "stress_avg": 50,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-15": {
+        "date": "2026-02-15",
+        "steps": 6744,
+        "rhr": 60,
+        "stress_avg": 45,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-16": {
+        "date": "2026-02-16",
+        "steps": 18413,
+        "rhr": 58,
+        "stress_avg": 39,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-17": {
+        "date": "2026-02-17",
+        "steps": 6577,
+        "rhr": 56,
+        "stress_avg": 35,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-18": {
+        "date": "2026-02-18",
+        "steps": 81,
+        "rhr": 59,
+        "stress_avg": 23,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-19": {
+        "date": "2026-02-19",
+        "steps": null,
+        "rhr": null,
+        "stress_avg": -1,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-20": {
+        "date": "2026-02-20",
+        "steps": 9712,
+        "rhr": 64,
+        "stress_avg": 43,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-21": {
+        "date": "2026-02-21",
+        "steps": 3813,
+        "rhr": 53,
+        "stress_avg": 24,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-22": {
+        "date": "2026-02-22",
+        "steps": 6637,
+        "rhr": 53,
+        "stress_avg": 34,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-23": {
+        "date": "2026-02-23",
+        "steps": 3230,
+        "rhr": 60,
+        "stress_avg": 40,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-24": {
+        "date": "2026-02-24",
+        "steps": 17032,
+        "rhr": 63,
+        "stress_avg": 42,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-25": {
+        "date": "2026-02-25",
+        "steps": 3990,
+        "rhr": 63,
+        "stress_avg": 44,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-26": {
+        "date": "2026-02-26",
+        "steps": 10851,
+        "rhr": 66,
+        "stress_avg": 65,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-27": {
+        "date": "2026-02-27",
+        "steps": 8914,
+        "rhr": 61,
+        "stress_avg": 45,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-28": {
+        "date": "2026-02-28",
+        "steps": 2485,
+        "rhr": 52,
+        "stress_avg": 17,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-01": {
+        "date": "2026-03-01",
+        "steps": 4869,
+        "rhr": 53,
+        "stress_avg": 27,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-02": {
+        "date": "2026-03-02",
+        "steps": 7288,
+        "rhr": 58,
+        "stress_avg": 34,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-03": {
+        "date": "2026-03-03",
+        "steps": 3824,
+        "rhr": 53,
+        "stress_avg": 28,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-04": {
+        "date": "2026-03-04",
+        "steps": 6374,
+        "rhr": 57,
+        "stress_avg": 52,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-05": {
+        "date": "2026-03-05",
+        "steps": 1708,
+        "rhr": 56,
+        "stress_avg": 35,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-06": {
+        "date": "2026-03-06",
+        "steps": 8760,
+        "rhr": 56,
+        "stress_avg": 34,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-07": {
+        "date": "2026-03-07",
+        "steps": 2835,
+        "rhr": 57,
+        "stress_avg": 29,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-08": {
+        "date": "2026-03-08",
+        "steps": 2655,
+        "rhr": 54,
+        "stress_avg": 26,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-09": {
+        "date": "2026-03-09",
+        "steps": 4583,
+        "rhr": 53,
+        "stress_avg": 32,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-10": {
+        "date": "2026-03-10",
+        "steps": 172,
+        "rhr": 65,
+        "stress_avg": 30,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-11": {
+        "date": "2026-03-11",
+        "steps": null,
+        "rhr": null,
+        "stress_avg": null,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-12": {
+        "date": "2026-03-12",
+        "steps": 3244,
+        "rhr": null,
+        "stress_avg": 29,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-13": {
+        "date": "2025-12-13",
+        "steps": 5054,
+        "rhr": 65,
+        "stress_avg": 44,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-14": {
+        "date": "2025-12-14",
+        "steps": 4727,
+        "rhr": 51,
+        "stress_avg": 34,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-15": {
+        "date": "2025-12-15",
+        "steps": 1946,
+        "rhr": 59,
+        "stress_avg": 53,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-16": {
+        "date": "2025-12-16",
+        "steps": 8482,
+        "rhr": 55,
+        "stress_avg": 54,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-17": {
+        "date": "2025-12-17",
+        "steps": 9543,
+        "rhr": 50,
+        "stress_avg": 44,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-18": {
+        "date": "2025-12-18",
+        "steps": 7566,
+        "rhr": 56,
+        "stress_avg": 43,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-19": {
+        "date": "2025-12-19",
+        "steps": 7732,
+        "rhr": 57,
+        "stress_avg": 48,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-20": {
+        "date": "2025-12-20",
+        "steps": 7600,
+        "rhr": 56,
+        "stress_avg": 39,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-21": {
+        "date": "2025-12-21",
+        "steps": 10874,
+        "rhr": 56,
+        "stress_avg": 51,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-22": {
+        "date": "2025-12-22",
+        "steps": 6947,
+        "rhr": 56,
+        "stress_avg": 46,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-23": {
+        "date": "2025-12-23",
+        "steps": 8572,
+        "rhr": 55,
+        "stress_avg": 43,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-24": {
+        "date": "2025-12-24",
+        "steps": 13445,
+        "rhr": 57,
+        "stress_avg": 49,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-25": {
+        "date": "2025-12-25",
+        "steps": 8337,
+        "rhr": 55,
+        "stress_avg": 40,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-26": {
+        "date": "2025-12-26",
+        "steps": 8634,
+        "rhr": 52,
+        "stress_avg": 46,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-27": {
+        "date": "2025-12-27",
+        "steps": 19286,
+        "rhr": 59,
+        "stress_avg": 48,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-28": {
+        "date": "2025-12-28",
+        "steps": 8074,
+        "rhr": 60,
+        "stress_avg": 53,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-29": {
+        "date": "2025-12-29",
+        "steps": 7254,
+        "rhr": 64,
+        "stress_avg": 52,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-30": {
+        "date": "2025-12-30",
+        "steps": 262,
+        "rhr": 58,
+        "stress_avg": 27,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2025-12-31": {
+        "date": "2025-12-31",
+        "steps": 9472,
+        "rhr": 53,
+        "stress_avg": 48,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-01": {
+        "date": "2026-01-01",
+        "steps": 2726,
+        "rhr": 59,
+        "stress_avg": 51,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-02": {
+        "date": "2026-01-02",
+        "steps": 845,
+        "rhr": 37,
+        "stress_avg": 19,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-03": {
+        "date": "2026-01-03",
+        "steps": 10387,
+        "rhr": 62,
+        "stress_avg": 60,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-04": {
+        "date": "2026-01-04",
+        "steps": 7634,
+        "rhr": 48,
+        "stress_avg": 45,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-05": {
+        "date": "2026-01-05",
+        "steps": 7974,
+        "rhr": 56,
+        "stress_avg": 58,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-06": {
+        "date": "2026-01-06",
+        "steps": 3802,
+        "rhr": 57,
+        "stress_avg": 39,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-07": {
+        "date": "2026-01-07",
+        "steps": 6905,
+        "rhr": 54,
+        "stress_avg": 35,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-08": {
+        "date": "2026-01-08",
+        "steps": null,
+        "rhr": null,
+        "stress_avg": null,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-09": {
+        "date": "2026-01-09",
+        "steps": null,
+        "rhr": null,
+        "stress_avg": null,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-10": {
+        "date": "2026-01-10",
+        "steps": null,
+        "rhr": null,
+        "stress_avg": -1,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-11": {
+        "date": "2026-01-11",
+        "steps": 6699,
+        "rhr": 62,
+        "stress_avg": 48,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-12": {
+        "date": "2026-01-12",
+        "steps": 4424,
+        "rhr": 61,
+        "stress_avg": 55,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-13": {
+        "date": "2026-01-13",
+        "steps": 6398,
+        "rhr": 57,
+        "stress_avg": 35,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-14": {
+        "date": "2026-01-14",
+        "steps": 1613,
+        "rhr": 55,
+        "stress_avg": 30,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-15": {
+        "date": "2026-01-15",
+        "steps": 5708,
+        "rhr": 49,
+        "stress_avg": 28,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-16": {
+        "date": "2026-01-16",
+        "steps": 7217,
+        "rhr": 57,
+        "stress_avg": 61,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-17": {
+        "date": "2026-01-17",
+        "steps": 21005,
+        "rhr": 52,
+        "stress_avg": 59,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-18": {
+        "date": "2026-01-18",
+        "steps": 8254,
+        "rhr": 59,
+        "stress_avg": 55,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-19": {
+        "date": "2026-01-19",
+        "steps": 16112,
+        "rhr": 55,
+        "stress_avg": 47,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-20": {
+        "date": "2026-01-20",
+        "steps": 12269,
+        "rhr": 51,
+        "stress_avg": 47,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-21": {
+        "date": "2026-01-21",
+        "steps": 8560,
+        "rhr": 60,
+        "stress_avg": 76,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-22": {
+        "date": "2026-01-22",
+        "steps": 426,
+        "rhr": 62,
+        "stress_avg": 52,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-23": {
+        "date": "2026-01-23",
+        "steps": 13340,
+        "rhr": 59,
+        "stress_avg": 51,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-24": {
+        "date": "2026-01-24",
+        "steps": 601,
+        "rhr": 60,
+        "stress_avg": 29,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-25": {
+        "date": "2026-01-25",
+        "steps": null,
+        "rhr": null,
+        "stress_avg": -1,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-26": {
+        "date": "2026-01-26",
+        "steps": null,
+        "rhr": null,
+        "stress_avg": -1,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-27": {
+        "date": "2026-01-27",
+        "steps": 1111,
+        "rhr": 57,
+        "stress_avg": 24,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-28": {
+        "date": "2026-01-28",
+        "steps": null,
+        "rhr": null,
+        "stress_avg": -1,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-29": {
+        "date": "2026-01-29",
+        "steps": 3017,
+        "rhr": 65,
+        "stress_avg": 48,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-30": {
+        "date": "2026-01-30",
+        "steps": 3261,
+        "rhr": 57,
+        "stress_avg": 39,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-01-31": {
+        "date": "2026-01-31",
+        "steps": 7737,
+        "rhr": 67,
+        "stress_avg": 61,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-01": {
+        "date": "2026-02-01",
+        "steps": 1924,
+        "rhr": 57,
+        "stress_avg": 29,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-02": {
+        "date": "2026-02-02",
+        "steps": 4702,
+        "rhr": 55,
+        "stress_avg": 35,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-03": {
+        "date": "2026-02-03",
+        "steps": 3625,
+        "rhr": 61,
+        "stress_avg": 41,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-04": {
+        "date": "2026-02-04",
+        "steps": 13225,
+        "rhr": 56,
+        "stress_avg": 43,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-05": {
+        "date": "2026-02-05",
+        "steps": 1273,
+        "rhr": 61,
+        "stress_avg": 33,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-06": {
+        "date": "2026-02-06",
+        "steps": 15581,
+        "rhr": 65,
+        "stress_avg": 39,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-07": {
+        "date": "2026-02-07",
+        "steps": 10577,
+        "rhr": 60,
+        "stress_avg": 44,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-08": {
+        "date": "2026-02-08",
+        "steps": 8712,
+        "rhr": 58,
+        "stress_avg": 38,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-02-09": {
+        "date": "2026-02-09",
+        "steps": 6541,
+        "rhr": 57,
+        "stress_avg": 36,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-13": {
+        "date": "2026-03-13",
+        "steps": null,
+        "rhr": null,
+        "stress_avg": null,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-14": {
+        "date": "2026-03-14",
+        "steps": 5187,
+        "rhr": 63,
+        "stress_avg": 86,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-15": {
+        "date": "2026-03-15",
+        "steps": 5233,
+        "rhr": 55,
+        "stress_avg": 33,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-16": {
+        "date": "2026-03-16",
+        "steps": 12718,
+        "rhr": 57,
+        "stress_avg": 50,
+        "body_battery_max": null,
+        "body_battery_min": null
+    },
+    "2026-03-17": {
+        "date": "2026-03-17",
+        "steps": 2240,
+        "rhr": 57,
+        "stress_avg": 36,
+        "body_battery_max": null,
+        "body_battery_min": null
+    }
+}

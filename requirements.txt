@@ -1,0 +1,8 @@
+garminconnect
+streamlit
+pandas
+plotly
+statsmodels
+openai
+fpdf2
+supabase
