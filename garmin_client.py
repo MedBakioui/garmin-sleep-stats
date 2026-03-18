@@ -44,8 +44,10 @@ class GarminClient:
                     session_data = json.loads(self.session_token)
                     self.client.login(token_store=session_data)
                     return True, "Session restaurée (Secrets)"
+                except json.JSONDecodeError as je:
+                    return False, f"Erreur de format JSON dans GARMIN_SESSION. Assurez-vous d'avoir bien copié le contenu complet sans rien ajouter d'autre. Erreur: {je}"
                 except Exception as e:
-                    print(f"Erreur lors de la lecture du Secret GARMIN_SESSION : {e}")
+                    return False, f"Le jeton GARMIN_SESSION est invalide ou expiré. Impossible de contourner le blocage IP. Erreur: {e}"
             
             # Tentative de chargement d'une session existante
             if os.path.exists(session_path):

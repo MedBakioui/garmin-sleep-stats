@@ -93,7 +93,7 @@ def render_login():
                                     if st.session_state.get('remember_me', False):
                                         cookie_manager.set("garmin_stats_auth_token", login_token, expires_at=datetime.datetime.now() + datetime.timedelta(days=365))
                                         st.session_state['login_success_wait'] = True
-                                        st.rerun()
+                                        # PAS DE st.rerun() POUR LAISSER LE COOKIE S'ENREGISTRER !
                                     else:
                                         st.session_state['authenticated'] = True
                                         st.session_state['login_step'] = 1
