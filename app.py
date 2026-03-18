@@ -68,6 +68,9 @@ if 'garmin_client' not in st.session_state:
                 st.session_state['garmin_client'] = client
                 st.toast("✅ Profil Garmin chargé automatiquement")
             else:
+                # Si échec (ex: 429), on vide le cache pour que le prochain refresh retente la connexion
+                get_cached_garmin_client.clear()
+                
                 if "429" in message or "Rate limit" in message or "Too Many Requests" in message:
                     st.error("⚠️ **Garmin : Trop de tentatives de connexion.**")
                     st.info("Garmin a temporairement bloqué les accès (Erreur 429). **Veuillez patienter 15 à 30 minutes** sans rafraîchir la page, puis réessayez.")
