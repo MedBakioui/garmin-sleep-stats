@@ -51,7 +51,7 @@ def check_auth():
         with tab_login:
             email = st.text_input("Email", key="login_email")
             password = st.text_input("Mot de passe", type="password", key="login_password")
-            if st.button("Connexion", kind="primary"):
+            if st.button("Connexion", type="primary"):
                 try:
                     # Initialisation temporaire pour l'auth
                     from supabase import create_client
