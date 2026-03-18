@@ -39,55 +39,72 @@ if 'garmin_client' not in st.session_state:
 
 # --- MAIN NAVIGATION ---
 
-def check_auth():
-    if 'user' not in st.session_state:
-        st.session_state['user'] = None
+# --- MAIN NAVIGATION ---
 
-    if st.session_state['user'] is None:
-        st.title("🔐 Connexion Garmin Sleep Stats")
-        
-        tab_login, tab_signup = st.tabs(["Se connecter", "Créer un compte"])
-        
-        with tab_login:
-            email = st.text_input("Email", key="login_email")
-            password = st.text_input("Mot de passe", type="password", key="login_password")
-            if st.button("Connexion", type="primary"):
-                try:
-                    # Initialisation temporaire pour l'auth
-                    from supabase import create_client
-                    url = st.secrets["SUPABASE_URL"]
-                    key = st.secrets["SUPABASE_KEY"]
-                    supabase = create_client(url, key)
-                    
-                    res = supabase.auth.sign_in_with_password({"email": email, "password": password})
-                    st.session_state['user'] = res.user
-                    st.success("Connecté !")
+def check_auth():
+    if 'authenticated' not in st.session_state:
+        st.session_state['authenticated'] = False
+
+    if not st.session_state['authenticated']:
+        # --- CSS PREMIUM LOGIN ---
+        st.markdown("""
+            <style>
+            .login-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 40px;
+                background: rgba(15, 23, 42, 0.4);
+                backdrop-filter: blur(20px);
+                border-radius: 24px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+                max-width: 450px;
+                margin: 100px auto;
+                text-align: center;
+            }
+            .login-title {
+                font-family: 'Inter', sans-serif;
+                font-size: 2rem;
+                font-weight: 800;
+                background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                margin-bottom: 10px;
+            }
+            .login-subtitle {
+                color: #94a3b8;
+                font-size: 0.9rem;
+                margin-bottom: 30px;
+            }
+            /* Masquer le header Streamlit sur le login */
+            header {visibility: hidden;}
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            </style>
+        """, unsafe_allow_html=True)
+
+        if 'ACCESS_CODE' in st.secrets:
+            st.markdown('<div class="login-container">', unsafe_allow_html=True)
+            st.markdown('<div class="login-title">🌙 Garmin Sleep Stats</div>', unsafe_allow_html=True)
+            st.markdown('<div class="login-subtitle">Accès sécurisé à votre tableau de bord biologique</div>', unsafe_allow_html=True)
+            
+            entered_code = st.text_input("Code d'accès", type="password", placeholder="••••", label_visibility="collapsed")
+            
+            if st.button("DÉVERROUILLER", type="primary", use_container_width=True):
+                if entered_code == st.secrets['ACCESS_CODE']:
+                    st.session_state['authenticated'] = True
                     st.rerun()
-                except Exception as e:
-                    st.error(f"Erreur : {e}")
-        
-        with tab_signup:
-            new_email = st.text_input("Email", key="signup_email")
-            new_password = st.text_input("Mot de passe", type="password", key="signup_password")
-            if st.button("Créer mon compte"):
-                try:
-                    from supabase import create_client
-                    url = st.secrets["SUPABASE_URL"]
-                    key = st.secrets["SUPABASE_KEY"]
-                    supabase = create_client(url, key)
-                    
-                    supabase.auth.sign_up({"email": new_email, "password": new_password})
-                    st.info("Compte créé ! Vérifiez vos emails si nécessaire ou connectez-vous.")
-                except Exception as e:
-                    st.error(f"Erreur : {e}")
-        st.stop()
+                else:
+                    st.error("Code incorrect.")
+            
+            st.markdown('</div>', unsafe_allow_html=True)
+            st.stop()
+        else:
+            st.session_state['authenticated'] = True
 
 check_auth()
-
-if st.sidebar.button("Déconnexion"):
-    for key in list(st.session_state.keys()):
-        del st.session_state[key]
-    st.rerun()
 
 tab_obj, tab_stat, tab_journal, tab_doc, tab_ai, tab_settings = st.tabs(["🎯 Objectifs", "📊 Statistiques", "📓 Journal", "📘 Guide", "💬 Coach IA", "⚙️ Réglages"])
 
