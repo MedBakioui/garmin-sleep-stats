@@ -25,20 +25,25 @@ class DataManager:
     def __init__(self, client: GarminClient):
         """Initialise le DataManager avec un client Garmin."""
         self.client = client
-        self._sleep_cache: Dict[str, Any] = self._load_cache(CACHE_FILE)
-        self._metrics_cache: Dict[str, Any] = self._load_cache(METRICS_CACHE_FILE)
         
         # --- SUPABASE CONFIG ---
         self.supabase: Optional[Client] = None
+        self.user_id: Optional[str] = None
+        
         if SUPABASE_AVAILABLE:
             try:
-                # Utilise st.secrets pour le Cloud
                 url = st.secrets.get("SUPABASE_URL")
                 key = st.secrets.get("SUPABASE_KEY")
                 if url and key:
                     self.supabase = create_client(url, key)
+                    # On récupère le user_id depuis la session streamlit
+                    if 'user' in st.session_state and st.session_state.user:
+                        self.user_id = st.session_state.user.id
             except:
                 pass
+
+        self._sleep_cache: Dict[str, Any] = self._load_cache(CACHE_FILE)
+        self._metrics_cache: Dict[str, Any] = self._load_cache(METRICS_CACHE_FILE)
 
     def _load_cache(self, file_path: str) -> Dict[str, Any]:
         """Charge les données depuis le cache local (JSON) et se synchronise avec Supabase."""
@@ -50,15 +55,25 @@ class DataManager:
             except:
                 pass
         
-        # --- SYNC DEPUIS SUPABASE ---
-        if self.supabase:
+        # --- SYNC DEPUIS SUPABASE (Filtré par user_id) ---
+        if self.supabase and self.user_id:
             table_name = "sleep_data" if "sleep_cache" in file_path else "daily_metrics"
             try:
-                # On récupère toutes les données de la table
-                response = self.supabase.table(table_name).select("date, content").execute()
+                # On récupère uniquement les données de l'utilisateur connecté
+                content_col = "raw_data" if table_name == "sleep_data" else "*" 
+                response = self.supabase.table(table_name).select(f"date, {content_col}").eq("user_id", self.user_id).execute()
+                
                 if response.data:
-                    # On fusionne avec le cache local (Supabase gagne sur les dates existantes pour le Cloud)
-                    remote_data = {row['date']: row['content'] for row in response.data}
+                    # On fusionne. Note: pour sleep_data, le contenu est dans 'raw_data' selon le nouveau schéma
+                    remote_data = {}
+                    for row in response.data:
+                        d = str(row['date'])
+                        if table_name == "sleep_data":
+                            remote_data[d] = row['raw_data']
+                        else:
+                            # Pour daily_metrics, on reconstruit un dict compatible avec le cache local
+                            remote_data[d] = row # Contient steps, rhr, stress_avg, etc.
+                    
                     local_cache.update(remote_data)
                     
                     # On met à jour le fichier local pour les prochaines lectures rapides
@@ -74,14 +89,30 @@ class DataManager:
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(cache, f, indent=4)
             
-        # Sauvegarde distante (Supabase)
-        if self.supabase:
+        # Sauvegarde distante (Supabase) avec user_id
+        if self.supabase and self.user_id:
             table_name = "sleep_data" if "sleep_cache" in file_path else "daily_metrics"
             try:
-                # On prépare les données pour un upsert massif
-                to_upsert = [{"date": d, "content": c} for d, c in cache.items()]
-                # Supabase upsert (par lots si besoin, mais ici on assume que le cache est raisonnable)
-                self.supabase.table(table_name).upsert(to_upsert).execute()
+                to_upsert = []
+                for d, c in cache.items():
+                    if table_name == "sleep_data":
+                        to_upsert.append({
+                            "user_id": self.user_id,
+                            "date": d,
+                            "raw_data": c
+                        })
+                    else:
+                        # daily_metrics mapping
+                        to_upsert.append({
+                            "user_id": self.user_id,
+                            "date": d,
+                            "steps": c.get("steps"),
+                            "rhr": c.get("rhr"),
+                            "stress_avg": c.get("stress_avg")
+                        })
+                
+                if to_upsert:
+                    self.supabase.table(table_name).upsert(to_upsert, on_conflict="user_id,date").execute()
             except Exception as e:
                 print(f"Supabase Sync Error: {e}")
 

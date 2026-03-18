@@ -40,26 +40,54 @@ if 'garmin_client' not in st.session_state:
 # --- MAIN NAVIGATION ---
 
 def check_auth():
-    if 'authenticated' not in st.session_state:
-        st.session_state['authenticated'] = False
+    if 'user' not in st.session_state:
+        st.session_state['user'] = None
 
-    if not st.session_state['authenticated']:
-        st.title("🔐 Accès Sécurisé")
-        # On vérifie si un code est défini dans les secrets (Cloud ou local)
-        # Si aucun code n'est défini, on laisse passer (pour le dev local sans config)
-        if 'ACCESS_CODE' in st.secrets:
-            entered_code = st.text_input("Entrez votre code d'accès", type="password")
-            if entered_code == st.secrets['ACCESS_CODE']:
-                st.session_state['authenticated'] = True
-                st.rerun()
-            elif entered_code:
-                st.error("Code incorrect.")
-            st.stop()
-        else:
-            # En local, on peut outrepasser si on n'a pas configuré de code
-            st.session_state['authenticated'] = True
+    if st.session_state['user'] is None:
+        st.title("🔐 Connexion Garmin Sleep Stats")
+        
+        tab_login, tab_signup = st.tabs(["Se connecter", "Créer un compte"])
+        
+        with tab_login:
+            email = st.text_input("Email", key="login_email")
+            password = st.text_input("Mot de passe", type="password", key="login_password")
+            if st.button("Connexion", kind="primary"):
+                try:
+                    # Initialisation temporaire pour l'auth
+                    from supabase import create_client
+                    url = st.secrets["SUPABASE_URL"]
+                    key = st.secrets["SUPABASE_KEY"]
+                    supabase = create_client(url, key)
+                    
+                    res = supabase.auth.sign_in_with_password({"email": email, "password": password})
+                    st.session_state['user'] = res.user
+                    st.success("Connecté !")
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Erreur : {e}")
+        
+        with tab_signup:
+            new_email = st.text_input("Email", key="signup_email")
+            new_password = st.text_input("Mot de passe", type="password", key="signup_password")
+            if st.button("Créer mon compte"):
+                try:
+                    from supabase import create_client
+                    url = st.secrets["SUPABASE_URL"]
+                    key = st.secrets["SUPABASE_KEY"]
+                    supabase = create_client(url, key)
+                    
+                    supabase.auth.sign_up({"email": new_email, "password": new_password})
+                    st.info("Compte créé ! Vérifiez vos emails si nécessaire ou connectez-vous.")
+                except Exception as e:
+                    st.error(f"Erreur : {e}")
+        st.stop()
 
 check_auth()
+
+if st.sidebar.button("Déconnexion"):
+    for key in list(st.session_state.keys()):
+        del st.session_state[key]
+    st.rerun()
 
 tab_obj, tab_stat, tab_journal, tab_doc, tab_ai, tab_settings = st.tabs(["🎯 Objectifs", "📊 Statistiques", "📓 Journal", "📘 Guide", "💬 Coach IA", "⚙️ Réglages"])
 
