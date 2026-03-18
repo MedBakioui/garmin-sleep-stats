@@ -1,60 +1,49 @@
 import streamlit as st
 
 def render_login():
-    """Affiche la page de connexion luxury minimaliste bleue (Version originale)."""
+    """Affiche la page de connexion calquée exactement sur l'image de référence."""
 
+    # --- CSS PIXEL-PERFECT LOGIN ---
     st.markdown("""
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Josefin+Sans:wght@100;200;300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Josefin+Sans:wght@100;200;300;400;600&display=swap');
 
-        /* 1. Reset & fond */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        /* 1. Global Reset & Fond Immersif avec Particules */
         .stApp {
-            background: #03050f !important;
+            background: #010409 !important;
             font-family: 'Josefin Sans', sans-serif;
+            overflow: hidden !important;
         }
 
-        /* 2. Lumières ambiantes */
+        /* Particules subtiles en fond */
         .stApp::before {
             content: '';
             position: fixed;
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(59,111,212,0.12) 0%, transparent 70%);
-            top: -200px; left: -200px;
-            pointer-events: none;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(91,142,230,0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(91,142,230,0.05) 0%, transparent 40%),
+                radial-gradient(1px 1px at 10% 10%, #fff 100%, transparent 0),
+                radial-gradient(1px 1px at 20% 50%, #fff 100%, transparent 0),
+                radial-gradient(1px 1px at 70% 20%, #fff 100%, transparent 0),
+                radial-gradient(1px 1px at 40% 80%, #fff 100%, transparent 0),
+                radial-gradient(1px 1px at 90% 90%, #fff 100%, transparent 0);
+            background-size: 100% 100%, 100% 100%, 300px 300px, 400px 400px, 350px 350px, 250px 250px, 500px 500px;
+            opacity: 0.3;
             z-index: 0;
-            animation: drift1 18s ease-in-out infinite alternate;
-        }
-        .stApp::after {
-            content: '';
-            position: fixed;
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(26,58,122,0.1) 0%, transparent 70%);
-            bottom: -150px; right: -100px;
             pointer-events: none;
-            z-index: 0;
-            animation: drift2 24s ease-in-out infinite alternate;
-        }
-        @keyframes drift1 {
-            0%   { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, -20px) scale(1.1); }
-        }
-        @keyframes drift2 {
-            0%   { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(-20px, 15px) scale(1.08); }
         }
 
-        /* 3. Masquer éléments Streamlit */
-        header[data-testid="stHeader"],
-        #MainMenu,
-        footer,
-        .stDeployButton,
+        /* 2. Cacher Streamlit */
+        header[data-testid="stHeader"], 
+        #MainMenu, 
+        footer, 
+        .stDeployButton, 
         [data-testid="stSidebarNav"] {
             display: none !important;
         }
 
-        /* 4. Centrage */
+        /* 3. Container de centrage */
         [data-testid="block-container"] {
             padding: 0 !important;
             margin: 0 !important;
@@ -64,284 +53,160 @@ def render_login():
             align-items: center !important;
             min-height: 100vh !important;
             max-width: 100% !important;
-            position: relative;
             z-index: 10;
         }
 
-        /* 5. La carte */
+        /* 4. La Carte (Look Image) */
         .login-card {
             position: relative;
             width: 100%;
-            max-width: 420px;
-            padding: 3.5rem 2.8rem 3rem;
-            background: rgba(6, 10, 28, 0.78);
-            border: 0.5px solid rgba(91, 142, 230, 0.18);
-            border-top: 0.5px solid rgba(91, 142, 230, 0.45);
-            border-radius: 2px;
-            backdrop-filter: blur(60px);
-            -webkit-backdrop-filter: blur(60px);
-            animation: cardReveal 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-            transform: translateY(40px);
-            overflow: hidden;
+            max-width: 480px;
+            padding: 5rem 4rem 4rem;
+            background: rgba(4, 7, 20, 0.85);
+            border: 0.5px solid rgba(255, 255, 255, 0.03); /* Bordure très fine */
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.8);
+            border-radius: 4px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            animation: fadeIn 1.5s ease;
         }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes cardReveal {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Ligne dorée haut */
-        .login-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 10%; right: 10%;
-            height: 1px;
-            background: linear-gradient(to right, transparent, #5b8ee6, transparent);
-            opacity: 0.5;
-        }
-
-        /* Scan de lumière */
-        .login-card::after {
-            content: '';
-            position: absolute;
-            top: -50%; left: -60%;
-            width: 40%; height: 200%;
-            background: linear-gradient(to right, transparent, rgba(91,142,230,0.03), transparent);
-            transform: skewX(-20deg);
-            animation: scanLight 8s ease-in-out infinite;
-        }
-        @keyframes scanLight {
-            0%, 100% { left: -60%; opacity: 0; }
-            20%       { opacity: 1; }
-            40%       { left: 160%; opacity: 0; }
-            41%, 99%  { left: -60%; opacity: 0; }
-        }
-
-        /* Coins décoratifs */
+        /* Coins en L (Coins décoratifs de l'image) */
         .corner {
             position: absolute;
-            width: 12px; height: 12px;
-            border-color: rgba(91, 142, 230, 0.25);
+            width: 15px; height: 15px;
+            border-color: rgba(91, 142, 230, 0.2);
             border-style: solid;
         }
-        .corner-tl { top: 12px; left: 12px; border-width: 0.5px 0 0 0.5px; }
-        .corner-tr { top: 12px; right: 12px; border-width: 0.5px 0.5px 0 0; }
-        .corner-bl { bottom: 12px; left: 12px; border-width: 0 0 0.5px 0.5px; }
-        .corner-br { bottom: 12px; right: 12px; border-width: 0 0.5px 0.5px 0; }
+        .corner-tl { top: 20px; left: 20px; border-width: 0.5px 0 0 0.5px; }
+        .corner-tr { top: 20px; right: 20px; border-width: 0.5px 0.5px 0 0; }
+        .corner-bl { bottom: 20px; left: 20px; border-width: 0 0 0.5px 0.5px; }
+        .corner-br { bottom: 20px; right: 20px; border-width: 0 0.5px 0.5px 0; }
 
-        /* 6. Header */
-        .login-logo {
+        /* 5. Logo (Carré +) */
+        .logo-box {
+            width: 48px; height: 48px;
+            border: 0.5px solid rgba(91, 142, 230, 0.4);
+            margin: 0 auto 3rem;
             display: flex;
+            align-items: center;
             justify-content: center;
-            margin-bottom: 1.8rem;
-        }
-        .login-logo-mark {
-            width: 44px; height: 44px;
-            border: 0.5px solid rgba(91, 142, 230, 0.35);
-            border-radius: 2px;
             position: relative;
-            animation: logoFade 1.8s ease forwards;
-            opacity: 0;
         }
-        .login-logo-mark::before {
-            content: '';
-            position: absolute;
-            width: 14px; height: 0.5px;
-            background: rgba(91, 142, 230, 0.6);
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
+        .logo-box::before {
+            content: '+';
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 24px;
+            font-weight: 200;
+            color: rgba(91, 142, 230, 0.6);
         }
-        .login-logo-mark::after {
-            content: '';
-            position: absolute;
-            width: 0.5px; height: 14px;
-            background: rgba(91, 142, 230, 0.6);
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        @keyframes logoFade { to { opacity: 1; } }
 
+        /* 6. Titre & Sous-titre Style Image */
         .login-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 2.2rem;
+            font-size: 3.2rem;
             font-weight: 300;
-            color: #dce8fa;
-            letter-spacing: 0.12em;
-            line-height: 1;
+            color: #ffffff;
+            letter-spacing: 4px;
             margin-bottom: 0.5rem;
-            text-align: center;
-            animation: textReveal 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-            opacity: 0;
-            transform: translateY(12px);
+            line-height: 1;
         }
         .login-title span {
             color: #5b8ee6;
-            font-weight: 400;
+            margin-left: 10px;
         }
-
         .login-subtitle {
             font-family: 'Josefin Sans', sans-serif;
-            font-size: 0.6rem;
-            font-weight: 200;
-            color: rgba(91, 142, 230, 0.55);
-            letter-spacing: 0.45em;
+            font-size: 0.75rem;
+            color: rgba(91, 142, 230, 0.6);
+            letter-spacing: 6px;
             text-transform: uppercase;
-            text-align: center;
-            margin-bottom: 0;
-            animation: textReveal 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
-            opacity: 0;
-            transform: translateY(12px);
+            font-weight: 400;
+            margin-bottom: 4rem;
         }
 
-        @keyframes textReveal {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* 7. Séparateur */
-        .login-divider {
+        /* 7. Séparateur (Dot & Lines) */
+        .divider-container {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin: 2.5rem 0;
-            animation: textReveal 1.6s ease 0.5s forwards;
-            opacity: 0;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 4rem;
         }
         .divider-line {
-            flex: 1; height: 0.5px;
-            background: linear-gradient(to right, transparent, rgba(91, 142, 230, 0.2));
-        }
-        .divider-line-r {
-            background: linear-gradient(to left, transparent, rgba(91, 142, 230, 0.2));
+            width: 100px; height: 0.5px;
+            background: linear-gradient(to right, transparent, rgba(91, 142, 230, 0.2), transparent);
         }
         .divider-dot {
             width: 3px; height: 3px;
+            background: rgba(91, 142, 230, 0.6);
             border-radius: 50%;
-            background: rgba(91, 142, 230, 0.4);
         }
 
-        /* 8. Label input */
-        .input-label-custom {
-            display: block;
+        /* 8. Labels & Inputs */
+        .input-label {
             font-family: 'Josefin Sans', sans-serif;
-            font-size: 0.6rem;
-            font-weight: 300;
-            letter-spacing: 0.35em;
+            font-size: 0.65rem;
             color: rgba(91, 142, 230, 0.5);
+            letter-spacing: 5px;
             text-transform: uppercase;
-            margin-bottom: 0.7rem;
-            animation: textReveal 1.6s ease 0.55s forwards;
-            opacity: 0;
+            margin-bottom: 1.5rem;
+            display: block;
         }
 
-        /* 9. Input Streamlit override */
         div[data-baseweb="input"] {
-            background: rgba(91, 142, 230, 0.03) !important;
-            border: 0.5px solid rgba(91, 142, 230, 0.12) !important;
-            border-bottom: 0.5px solid rgba(91, 142, 230, 0.3) !important;
-            border-radius: 0 !important;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
-            animation: textReveal 1.6s ease 0.6s forwards;
-            opacity: 0;
-        }
-        div[data-baseweb="input"]:focus-within {
-            background: rgba(91, 142, 230, 0.05) !important;
-            border-color: rgba(91, 142, 230, 0.4) !important;
-            border-bottom-color: #5b8ee6 !important;
-            box-shadow: none !important;
+            background: rgba(43, 45, 43, 0.2) !important; /* Couleur sombre du mdp de l'image */
+            border: 0.5px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 8px !important;
+            padding: 5px !important;
         }
         div[data-baseweb="input"] input {
-            color: #dce8fa !important;
-            font-family: 'Josefin Sans', sans-serif !important;
-            font-size: 1rem !important;
-            font-weight: 200 !important;
-            letter-spacing: 0.5em !important;
+            color: #ffffff !important;
             text-align: center !important;
-            padding: 14px 16px !important;
-        }
-        div[data-baseweb="input"] input::placeholder {
-            color: rgba(91, 142, 230, 0.2) !important;
-            letter-spacing: 0.3em !important;
-            font-size: 0.65rem !important;
+            font-size: 1.5rem !important;
+            letter-spacing: 12px !important;
+            padding: 15px !important;
         }
         div[data-baseweb="input"] svg { display: none !important; }
 
-        /* 10. Bouton — aligné à droite, largeur auto */
+        /* 9. Bouton Style Image */
         div[data-testid="stButton"] {
-            display: flex !important;
-            justify-content: flex-end !important;
             margin-top: 2rem !important;
-            animation: textReveal 1.6s ease 0.75s forwards;
-            opacity: 0;
         }
         div[data-testid="stButton"] button {
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 10px !important;
-            width: auto !important;
-            padding: 11px 20px !important;
-            background: transparent !important;
+            background: rgba(4, 7, 20, 0.8) !important;
             border: 0.5px solid rgba(91, 142, 230, 0.3) !important;
-            border-radius: 0 !important;
-            color: #5b8ee6 !important;
+            color: #ffffff !important;
+            border-radius: 8px !important;
+            padding: 1.2rem !important;
+            width: 100% !important;
             font-family: 'Josefin Sans', sans-serif !important;
-            font-size: 0.85rem !important;
-            font-weight: 300 !important;
-            letter-spacing: 0.2em !important;
+            font-size: 1.1rem !important;
+            letter-spacing: 8px !important;
             text-transform: uppercase !important;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
-            box-shadow: none !important;
-            position: relative;
-            overflow: hidden;
-        }
-        div[data-testid="stButton"] button::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: #5b8ee6;
-            transform: translateX(101%);
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        div[data-testid="stButton"] button:hover::before {
-            transform: translateX(0) !important;
+            font-weight: 300 !important;
+            transition: all 0.4s ease !important;
         }
         div[data-testid="stButton"] button:hover {
-            color: #03050f !important;
-        }
-        div[data-testid="stButton"] button p::after {
-            content: ' →';
+            border-color: #5b8ee6 !important;
+            background: rgba(91, 142, 230, 0.05) !important;
+            box-shadow: 0 0 20px rgba(91, 142, 230, 0.1) !important;
         }
 
-        /* 11. Footer */
+        /* 10. Footer */
         .login-footer {
-            text-align: center;
-            margin-top: 2.2rem;
+            margin-top: 4rem;
             font-family: 'Josefin Sans', sans-serif;
-            font-size: 0.55rem;
-            letter-spacing: 0.3em;
-            color: rgba(91, 142, 230, 0.18);
+            font-size: 0.6rem;
+            color: rgba(91, 142, 230, 0.25);
+            letter-spacing: 5px;
             text-transform: uppercase;
-            animation: textReveal 1.6s ease 0.9s forwards;
-            opacity: 0;
-        }
-
-        /* 12. Alerte erreur */
-        [data-testid="stAlert"] {
-            background-color: rgba(180, 50, 50, 0.05) !important;
-            border: 0.5px solid rgba(180, 50, 50, 0.2) !important;
-            border-radius: 0 !important;
-            color: rgba(220, 100, 100, 0.8) !important;
-            font-family: 'Josefin Sans', sans-serif !important;
-            font-size: 0.65rem !important;
-            letter-spacing: 0.25em !important;
-            text-transform: uppercase !important;
-            margin-top: 1rem !important;
-            box-shadow: none !important;
-            backdrop-filter: blur(10px);
         }
         </style>
     """, unsafe_allow_html=True)
 
-    # Structure HTML de la carte
+    # --- STRUCTURE HTML PIXEL-PERFECT ---
     st.markdown("""
         <div class="login-card">
             <div class="corner corner-tl"></div>
@@ -349,36 +214,38 @@ def render_login():
             <div class="corner corner-bl"></div>
             <div class="corner corner-br"></div>
 
-            <div class="login-logo">
-                <div class="login-logo-mark"></div>
-            </div>
+            <div class="logo-box"></div>
+            
             <div class="login-title">Garmin <span>Stats</span></div>
-            <div class="login-subtitle">Biohacking Central</div>
+            <div class="login-subtitle">BIOHACKING CENTRAL</div>
 
-            <div class="login-divider">
+            <div class="divider-container">
                 <div class="divider-line"></div>
                 <div class="divider-dot"></div>
-                <div class="divider-line divider-line-r"></div>
+                <div class="divider-line"></div>
             </div>
 
-            <div class="input-label-custom">Code d'accès sécurisé</div>
+            <div class="input-label">CODE D'ACCÈS SÉCURISÉ</div>
     """, unsafe_allow_html=True)
 
+    # Input Streamlit
     entered_code = st.text_input(
-        "Code",
-        type="password",
-        placeholder="• • • • • • • •",
+        "Code", 
+        type="password", 
+        placeholder="••••••••", 
         label_visibility="collapsed"
     )
 
-    if st.button("Déverrouiller"):
+    st.markdown('<div style="height: 10px;"></div>', unsafe_allow_html=True)
+
+    if st.button("INITIALISER LA SESSION"):
         if entered_code == st.secrets.get('ACCESS_CODE', ''):
             st.session_state['authenticated'] = True
             st.rerun()
         else:
-            st.error("ACCÈS NON AUTORISÉ")
+            st.error("ACCÈS RÉVOQUÉ")
 
     st.markdown("""
-            <div class="login-footer">Système sécurisé · Accès restreint</div>
+            <div class="login-footer">SYSTÈME SÉCURISÉ · ACCÈS RESTREINT</div>
         </div>
     """, unsafe_allow_html=True)
