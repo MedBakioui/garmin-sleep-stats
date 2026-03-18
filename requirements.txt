@@ -6,3 +6,6 @@ statsmodels
 openai
 fpdf2
 supabase
+pyotp
+qrcode[pil]
+python-dotenv

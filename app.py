@@ -42,17 +42,24 @@ if 'garmin_client' not in st.session_state:
 # --- MAIN NAVIGATION ---
 
 def check_auth():
+    """Vérifie l'authentification. Affiche la page de connexion si nécessaire."""
     if 'authenticated' not in st.session_state:
         st.session_state['authenticated'] = False
 
     if not st.session_state['authenticated']:
-        if 'ACCESS_CODE' in st.secrets:
+        # On force toujours l'affichage de la page de connexion
+        try:
             from ui.login import render_login
             render_login()
+            
+            # Message d'alerte si les secrets sont absents (cas courant de déploiement)
+            if 'ACCESS_CODE' not in st.secrets:
+                st.warning("⚠️ ATTENTION : ACCESS_CODE non trouvé dans les Secrets. L'authentification ne fonctionnera pas tant que vous ne l'avez pas configurée.")
+                
             st.stop()
-        else:
-            # En local sans secrets, on laisse passer
-            st.session_state['authenticated'] = True
+        except ImportError:
+            st.error("Fichier ui/login.py introuvable.")
+            st.stop()
 
 check_auth()
 
@@ -107,7 +114,11 @@ with tab_ai:
     col_k, col_info = st.columns([2, 1])
     with col_k:
         if 'deepseek_key' not in st.session_state or not st.session_state['deepseek_key']:
-            if os.path.exists("deepseek.key"):
+            # Priorité : Secrets Streamlit (pour le déploiement)
+            if 'DEEPSEEK_KEY' in st.secrets:
+                st.session_state['deepseek_key'] = st.secrets['DEEPSEEK_KEY']
+            # Secondaire : Fichier local (pour le dev)
+            elif os.path.exists("deepseek.key"):
                 with open("deepseek.key", "r") as f:
                     st.session_state['deepseek_key'] = f.read().strip()
             else:
