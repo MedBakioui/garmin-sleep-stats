@@ -56,31 +56,42 @@ def render_login():
                         
         # --- ÉTAPE 2 : TOTP (2FA) ---
         elif st.session_state['login_step'] == 2:
-            st.success("Étape 1 validée.")
-            st.warning("Étape 2 : Entrez le code de votre application 2FA.")
-            
-            with st.form("form_step2"):
-                totp_secret = st.secrets.get('TOTP_SECRET', '').strip()
-                code2 = st.text_input("Code 2FA (6 chiffres)", placeholder="Ex: 123456")
-                submit2 = st.form_submit_button("Vérifier", use_container_width=True)
+            if st.session_state.get('login_success_wait', False):
+                st.success("✅ Connexion réussie et Cookie sauvegardé !")
+                st.info("Votre session a été mise en mémoire cache sécurisée.")
+                if st.button("🚀 Entrer dans le tableau de bord", use_container_width=True, type="primary"):
+                    st.session_state['authenticated'] = True
+                    st.session_state['login_step'] = 1
+                    del st.session_state['login_success_wait']
+                    st.rerun()
+            else:
+                st.success("Étape 1 validée.")
+                st.warning("Étape 2 : Entrez le code de votre application 2FA.")
                 
-                if submit2:
-                    if totp_secret:
-                        try:
-                            totp = pyotp.TOTP(totp_secret)
-                            if totp.verify(code2.strip()):
-                                st.session_state['authenticated'] = True
-                                # Si Remember Me était coché, on persiste le token dans le navigateur via un Cookie
-                                if st.session_state.get('remember_me', False):
-                                    cookie_manager = get_cookie_manager()
-                                    cookie_manager.set("garmin_stats_auth_token", login_token, expires_at=datetime.datetime.now() + datetime.timedelta(days=365))
-                                
-                                st.session_state['login_step'] = 1
-                                st.rerun()
-                            else:
-                                st.error("Code 2FA invalide ou expiré.")
-                        except Exception as e:
-                            st.error(f"Erreur technique 2FA : {e}")
+                with st.form("form_step2"):
+                    totp_secret = st.secrets.get('TOTP_SECRET', '').strip()
+                    code2 = st.text_input("Code 2FA (6 chiffres)", placeholder="Ex: 123456")
+                    submit2 = st.form_submit_button("Vérifier", use_container_width=True)
+                    
+                    if submit2:
+                        if totp_secret:
+                            try:
+                                totp = pyotp.TOTP(totp_secret)
+                                if totp.verify(code2.strip()):
+                                    # Si Remember Me était coché, on persiste le token dans le navigateur via un Cookie
+                                    if st.session_state.get('remember_me', False):
+                                        cookie_manager = get_cookie_manager()
+                                        cookie_manager.set("garmin_stats_auth_token", login_token, expires_at=datetime.datetime.now() + datetime.timedelta(days=365))
+                                        st.session_state['login_success_wait'] = True
+                                        st.rerun()
+                                    else:
+                                        st.session_state['authenticated'] = True
+                                        st.session_state['login_step'] = 1
+                                        st.rerun()
+                                else:
+                                    st.error("Code 2FA invalide ou expiré.")
+                            except Exception as e:
+                                st.error(f"Erreur technique 2FA : {e}")
             
             # Aide & QR Code
             with st.expander("Configurer Google Authenticator"):
