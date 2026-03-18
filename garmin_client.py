@@ -41,11 +41,15 @@ class GarminClient:
             # Priorité absolue: Session issue des Streamlit Secrets
             if self.session_token:
                 try:
+                    # Si c'est correctement encastré dans des guillemets JSON
                     session_data = json.loads(self.session_token)
+                except json.JSONDecodeError:
+                    # Le texte collé n'a pas de guillemets, on prend la chaine brute
+                    session_data = self.session_token.strip().strip("'").strip('"')
+
+                try:
                     self.client.login(token_store=session_data)
                     return True, "Session restaurée (Secrets)"
-                except json.JSONDecodeError as je:
-                    return False, f"Erreur de format JSON dans GARMIN_SESSION. Assurez-vous d'avoir bien copié le contenu complet sans rien ajouter d'autre. Erreur: {je}"
                 except Exception as e:
                     return False, f"Le jeton GARMIN_SESSION est invalide ou expiré. Impossible de contourner le blocage IP. Erreur: {e}"
             
