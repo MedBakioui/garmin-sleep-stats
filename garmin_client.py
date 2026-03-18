@@ -48,7 +48,7 @@ class GarminClient:
                     session_data = self.session_token.strip().strip("'").strip('"')
 
                 try:
-                    self.client.login(token_store=session_data)
+                    self.client.login(tokenstore=session_data)
                     return True, "Session restaurée (Secrets)"
                 except Exception as e:
                     return False, f"Le jeton GARMIN_SESSION est invalide ou expiré. Impossible de contourner le blocage IP. Erreur: {e}"
