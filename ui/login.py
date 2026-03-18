@@ -3,23 +3,24 @@ import streamlit as st
 def render_login():
     """Affiche la page de connexion épique et gère l'authentification."""
     
-    # --- CSS ULTRA-PREMIUM EXPERT LOGIN ---
+    # --- CSS ULTRA-PREMIUM EXPERT LOGIN v2 (Biotech Edition) ---
     st.markdown("""
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap');
         
-        /* 1. Reset Global & Fond Animé Complexe (Mesh Gradient) */
+        /* 1. Fond Animé "Deep Biotech" (Mesh Shift) */
         .stApp {
-            background-color: #030014 !important;
+            background-color: #020617 !important;
             background-image: 
-                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,39%,30%,0.2) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,49%,30%,0.2) 0, transparent 50%);
-            animation: breathe 10s ease-in-out infinite alternate !important;
+                radial-gradient(at 0% 100%, hsla(160,84%,15%,0.3) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(190,90%,20%,0.3) 0, transparent 50%),
+                radial-gradient(at 50% 50%, hsla(210,50%,5%,1) 0, transparent 100%);
+            background-attachment: fixed !important;
+            animation: colorShift 20s ease-in-out infinite alternate !important;
         }
-        @keyframes breathe {
-            form { filter: brightness(0.8); }
-            to { filter: brightness(1.2); }
+        @keyframes colorShift {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
         }
         
         /* 2. Hack pour cacher les éléments parasites de Streamlit */
@@ -45,181 +46,137 @@ def render_login():
             z-index: 10;
         }
 
-        /* 4. Le Glassmorphism Panel (La Carte principale Expert) */
+        /* 4. La Carte "Carbon Glass" Expert */
         .login-card {
-            background: rgba(10, 10, 25, 0.45);
-            backdrop-filter: blur(40px) saturate(250%);
-            -webkit-backdrop-filter: blur(40px) saturate(250%);
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
-            border-left: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 3.5rem 3rem;
+            background: rgba(8, 15, 25, 0.7);
+            backdrop-filter: blur(45px) saturate(180%);
+            -webkit-backdrop-filter: blur(45px) saturate(180%);
+            border-radius: 28px;
+            border: 1px solid rgba(0, 255, 200, 0.1);
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 4rem 3rem;
             width: 100%;
             max-width: 440px;
             box-shadow: 
-                0 30px 60px -10px rgba(0, 0, 0, 0.8),
-                0 0 40px -10px rgba(99, 102, 241, 0.15);
+                0 40px 100px -20px rgba(0, 0, 0, 0.9),
+                0 0 20px -5px rgba(0, 255, 200, 0.1);
             text-align: center;
-            animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: emerge 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
             opacity: 0;
-            transform: translateY(50px) scale(0.97);
-            position: relative;
-            overflow: hidden;
+            transform: translateY(30px) scale(0.98);
         }
         
-        /* Effet de reflet interne sur la carte */
-        .login-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg);
-            animation: shine 6s infinite;
-        }
-        @keyframes shine {
-            0% { left: -100%; }
-            20% { left: 200%; }
-            100% { left: 200%; }
-        }
-
-        @keyframes slideUpFade {
+        @keyframes emerge {
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* 5. Typographie Titre & Sous-titre "Sci-Fi Clean" */
+        /* 5. Typographie "Chrome & Emerald" */
         .login-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.6rem;
             font-weight: 900;
             color: #ffffff;
-            margin-bottom: 0.2rem;
-            letter-spacing: -1.5px;
-            line-height: 1.1;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            margin-bottom: 0.3rem;
+            letter-spacing: -2px;
+            line-height: 1;
         }
         .login-title span {
-            background: linear-gradient(to right, #6366f1, #a855f7, #ec4899);
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-size: 200% auto;
-            animation: gradientText 5s linear infinite;
-        }
-        @keyframes gradientText {
-            to { background-position: 200% center; }
+            text-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
         }
         
         .login-subtitle {
             font-family: 'Outfit', sans-serif;
-            font-size: 0.85rem;
-            color: #bbc1ce;
+            font-size: 0.8rem;
+            color: #4ade80; /* Vert émeraude biotech */
             text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 3rem;
-            font-weight: 600;
-            opacity: 0.8;
+            letter-spacing: 5px;
+            margin-bottom: 3.5rem;
+            font-weight: 700;
+            opacity: 0.9;
         }
 
-        /* 6. Le Champ de Texte (Input) - Minimaliste et Focalisé */
+        /* 6. Le Champ de Texte "Void Input" */
         div[data-baseweb="input"] {
-            background: rgba(0, 0, 0, 0.4) !important;
-            border: 1px solid rgba(255, 255, 255, 0.05) !important;
-            border-radius: 12px !important;
-            padding: 6px 10px !important;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            background: rgba(0, 0, 0, 0.6) !important;
+            border: 1px solid rgba(0, 255, 200, 0.05) !important;
+            border-radius: 14px !important;
+            padding: 8px 12px !important;
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
         }
         div[data-baseweb="input"]:focus-within {
-            background: rgba(10, 15, 30, 0.9) !important;
-            border-color: rgba(168, 85, 247, 0.5) !important;
-            box-shadow: 
-                0 0 0 2px rgba(168, 85, 247, 0.2),
-                inset 0 0 15px rgba(168, 85, 247, 0.1) !important;
-            transform: translateY(-2px);
+            background: rgba(0, 5, 10, 0.95) !important;
+            border-color: #00f2fe !important;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.1) !important;
         }
         div[data-baseweb="input"] input {
-            color: #ffffff !important;
+            color: #e2e8f0 !important;
             font-family: 'Outfit', sans-serif !important;
-            font-size: 1.3rem !important;
-            letter-spacing: 8px !important;
+            font-size: 1.4rem !important;
+            letter-spacing: 10px !important;
             text-align: center !important;
-            font-weight: 700 !important;
-            padding: 12px !important;
+            font-weight: 800 !important;
         }
         div[data-baseweb="input"] input::placeholder {
-            color: #475569 !important;
-            letter-spacing: 2px !important;
-            font-size: 0.85rem !important;
-            font-weight: 500 !important;
+            color: #1e293b !important;
+            letter-spacing: 3px !important;
         }
         div[data-baseweb="input"] svg { display: none !important; }
 
-        /* 7. Le Bouton d'Action - Ultra Premium */
+        /* 7. Le Bouton "Electric Emerald" */
         div[data-testid="stButton"] button {
-            background: linear-gradient(115deg, #4f46e5, #9333ea, #db2777) !important;
+            background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
             background-size: 200% auto !important;
-            color: white !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            padding: 1.2rem !important;
-            border-radius: 12px !important;
+            color: #030014 !important; /* Texte sombre pour contraste expert */
+            border: none !important;
+            padding: 1.3rem !important;
+            border-radius: 14px !important;
             font-family: 'Outfit', sans-serif !important;
-            font-weight: 800 !important;
-            font-size: 1.05rem !important;
-            letter-spacing: 2.5px !important;
+            font-weight: 900 !important;
+            font-size: 1.1rem !important;
+            letter-spacing: 3px !important;
             text-transform: uppercase !important;
             width: 100% !important;
-            margin-top: 1.5rem !important;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
-            box-shadow: 
-                0 15px 30px -10px rgba(147, 51, 234, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-            position: relative;
-            overflow: hidden;
+            margin-top: 2rem !important;
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+            box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.5) !important;
         }
         div[data-testid="stButton"] button:hover {
             background-position: right center !important;
-            transform: translateY(-4px) !important;
-            box-shadow: 
-                0 20px 40px -10px rgba(147, 51, 234, 0.8),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
-            letter-spacing: 3px !important;
-        }
-        div[data-testid="stButton"] button:active {
-            transform: translateY(1px) !important;
-            box-shadow: 0 5px 15px -5px rgba(147, 51, 234, 0.5) !important;
+            transform: translateY(-5px) scale(1.02) !important;
+            box-shadow: 0 30px 50px -15px rgba(16, 185, 129, 0.7) !important;
+            letter-spacing: 4px !important;
         }
         
-        /* 8. Messages d'Erreur Override */
+        /* 8. Error Override Apex */
         [data-testid="stAlert"] {
-            background-color: rgba(220, 38, 38, 0.05) !important;
-            border: 1px solid rgba(220, 38, 38, 0.2) !important;
-            color: #f7aaaa !important;
-            backdrop-filter: blur(10px);
-            border-radius: 12px !important;
-            font-family: 'Outfit', sans-serif !important;
-            margin-top: 1.5rem !important;
-            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.1);
+            background: rgba(220, 38, 38, 0.05) !important;
+            border: 1px solid rgba(220, 38, 38, 0.3) !important;
+            color: #ef4444 !important;
+            border-radius: 14px !important;
+            font-weight: 600 !important;
         }
         </style>
     """, unsafe_allow_html=True)
 
-    # --- HTML STRUCTURE POUR LE DESIGN ---
-    # On encapsule la carte visuelle. 
-    # Streamlit injectera le composant input et button juste en dessous dans le conteneur principal flex.
+    # --- HTML STRUCTURE ---
     st.markdown("""
         <div class="login-card">
-            <div class="login-title">Garmin <span>Stats</span></div>
-            <div class="login-subtitle">Biohacking Central</div>
+            <div class="login-title">Garmin <span>Vault</span></div>
+            <div class="login-subtitle">SECURE DATA INTERFACE</div>
     """, unsafe_allow_html=True)
     
-    # --- LOGIQUE INTERACTIVE ---
-    entered_code = st.text_input("Code", type="password", placeholder="CODE SECURISÉ", label_visibility="collapsed")
+    # --- LOGIQUE ---
+    entered_code = st.text_input("Auth", type="password", placeholder="CODE D'ACCÈS", label_visibility="collapsed")
     
-    if st.button("INITIALISER LA SESSION", type="primary", use_container_width=True):
+    st.markdown('<div style="height: 10px;"></div>', unsafe_allow_html=True)
+    if st.button("INITIALISER LA CONNEXION", type="primary", use_container_width=True):
         if entered_code == st.secrets.get('ACCESS_CODE', ''):
             st.session_state['authenticated'] = True
             st.rerun()
         else:
-            st.error("ACCÈS NON AUTORISÉ")
+            st.error("ACCÈS RÉVOQUÉ")
             
-    # Fermeture de la div ouverte plus haut
     st.markdown("</div>", unsafe_allow_html=True)
