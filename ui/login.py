@@ -5,7 +5,6 @@ from io import BytesIO
 import extra_streamlit_components as stx
 import datetime
 
-@st.cache_resource
 def get_cookie_manager():
     return stx.CookieManager(key="garmin_cookies")
 
