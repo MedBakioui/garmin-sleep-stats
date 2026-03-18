@@ -28,7 +28,6 @@ class DataManager:
         
         # --- SUPABASE CONFIG ---
         self.supabase: Optional[Client] = None
-        self.user_id: Optional[str] = None
         
         if SUPABASE_AVAILABLE:
             try:
@@ -36,9 +35,6 @@ class DataManager:
                 key = st.secrets.get("SUPABASE_KEY")
                 if url and key:
                     self.supabase = create_client(url, key)
-                    # On récupère le user_id depuis la session streamlit
-                    if 'user' in st.session_state and st.session_state.user:
-                        self.user_id = st.session_state.user.id
             except:
                 pass
 
@@ -55,28 +51,26 @@ class DataManager:
             except:
                 pass
         
-        # --- SYNC DEPUIS SUPABASE (Filtré par user_id) ---
-        if self.supabase and self.user_id:
+        # --- SYNC DEPUIS SUPABASE ---
+        if self.supabase:
             table_name = "sleep_data" if "sleep_cache" in file_path else "daily_metrics"
             try:
-                # On récupère uniquement les données de l'utilisateur connecté
+                # Récupération simple
                 content_col = "raw_data" if table_name == "sleep_data" else "*" 
-                response = self.supabase.table(table_name).select(f"date, {content_col}").eq("user_id", self.user_id).execute()
+                response = self.supabase.table(table_name).select(f"date, {content_col}").execute()
                 
                 if response.data:
-                    # On fusionne. Note: pour sleep_data, le contenu est dans 'raw_data' selon le nouveau schéma
                     remote_data = {}
                     for row in response.data:
                         d = str(row['date'])
                         if table_name == "sleep_data":
                             remote_data[d] = row['raw_data']
                         else:
-                            # Pour daily_metrics, on reconstruit un dict compatible avec le cache local
-                            remote_data[d] = row # Contient steps, rhr, stress_avg, etc.
+                            remote_data[d] = row
                     
                     local_cache.update(remote_data)
                     
-                    # On met à jour le fichier local pour les prochaines lectures rapides
+                    # Mise à jour locale
                     with open(file_path, "w", encoding="utf-8") as f:
                         json.dump(local_cache, f, indent=4)
             except Exception as e:
@@ -89,22 +83,16 @@ class DataManager:
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(cache, f, indent=4)
             
-        # Sauvegarde distante (Supabase) avec user_id
-        if self.supabase and self.user_id:
+        # Sauvegarde distante (Supabase)
+        if self.supabase:
             table_name = "sleep_data" if "sleep_cache" in file_path else "daily_metrics"
             try:
                 to_upsert = []
                 for d, c in cache.items():
                     if table_name == "sleep_data":
-                        to_upsert.append({
-                            "user_id": self.user_id,
-                            "date": d,
-                            "raw_data": c
-                        })
+                        to_upsert.append({"date": d, "raw_data": c})
                     else:
-                        # daily_metrics mapping
                         to_upsert.append({
-                            "user_id": self.user_id,
                             "date": d,
                             "steps": c.get("steps"),
                             "rhr": c.get("rhr"),
@@ -112,7 +100,7 @@ class DataManager:
                         })
                 
                 if to_upsert:
-                    self.supabase.table(table_name).upsert(to_upsert, on_conflict="user_id,date").execute()
+                    self.supabase.table(table_name).upsert(to_upsert, on_conflict="date").execute()
             except Exception as e:
                 print(f"Supabase Sync Error: {e}")
 

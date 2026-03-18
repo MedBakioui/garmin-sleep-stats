@@ -15,7 +15,6 @@ class JournalManager:
     def __init__(self):
         # --- SUPABASE CONFIG ---
         self.supabase: Optional[Client] = None
-        self.user_id: Optional[str] = None
         
         if SUPABASE_AVAILABLE:
             try:
@@ -23,8 +22,6 @@ class JournalManager:
                 key = st.secrets.get("SUPABASE_KEY")
                 if url and key:
                     self.supabase = create_client(url, key)
-                    if 'user' in st.session_state and st.session_state.user:
-                        self.user_id = st.session_state.user.id
             except:
                 pass
                 
@@ -40,9 +37,9 @@ class JournalManager:
                 print(f"Erreur chargement journal: {e}")
         
         # --- SYNC DEPUIS SUPABASE ---
-        if self.supabase and self.user_id:
+        if self.supabase:
             try:
-                response = self.supabase.table("journal_entries").select("*").eq("user_id", self.user_id).execute()
+                response = self.supabase.table("journal_entries").select("*").execute()
                 if response.data:
                     remote_data = {}
                     for row in response.data:
@@ -50,10 +47,9 @@ class JournalManager:
                         remote_data[d] = {
                             "tags": row.get("tags", []),
                             "notes": row.get("note", ""),
-                            "mood": 3 # Par défaut si non stalké
+                            "mood": 3
                         }
                     local_journal.update(remote_data)
-                    # Mise à jour locale
                     with open(JOURNAL_FILE, 'w', encoding='utf-8') as f:
                         json.dump(local_journal, f, ensure_ascii=False, indent=2)
             except Exception as e:
@@ -70,18 +66,17 @@ class JournalManager:
             print(f"Erreur sauvegarde journal: {e}")
             
         # Sauvegarde distante (Supabase)
-        if self.supabase and self.user_id:
+        if self.supabase:
             try:
                 to_upsert = []
                 for d, c in self.journal.items():
                     to_upsert.append({
-                        "user_id": self.user_id,
                         "date": d,
                         "tags": c.get("tags", []),
                         "note": c.get("notes", "")
                     })
                 if to_upsert:
-                    self.supabase.table("journal_entries").upsert(to_upsert, on_conflict="user_id,date").execute()
+                    self.supabase.table("journal_entries").upsert(to_upsert, on_conflict="date").execute()
             except Exception as e:
                 print(f"Supabase Journal Sync Error: {e}")
 
