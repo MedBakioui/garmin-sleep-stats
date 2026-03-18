@@ -28,14 +28,41 @@ class GarminClient:
         self.client: Optional[Garmin] = None
 
     def connect(self) -> Tuple[bool, str]:
-        """Authentification auprès de Garmin Connect.
-
-        Returns:
-            Tuple[bool, str]: (Succès, Message de statut ou erreur).
-        """
+        """Authentification auprès de Garmin Connect avec persistance de session."""
+        import os
+        session_path = "garmin_session.json"
+        
         try:
             self.client = Garmin(self.email, self.password)
+            
+            # Tentative de chargement d'une session existante
+            if os.path.exists(session_path):
+                try:
+                    import json
+                    with open(session_path, 'r') as f:
+                        session_data = json.load(f)
+                    self.client.login(token_store=session_data)
+                    return True, "Session restaurée"
+                except Exception:
+                    # Si le token a expiré, on fait un login normal
+                    pass
+            
+            # Login normal si pas de session ou session expirée
             self.client.login()
+            
+            # Sauvegarde du nouveau token (utilisant garth sous le capot de garminconnect)
+            try:
+                import json
+                # garminconnect uses 'garth' for session management
+                # we can save the garth session as a directory or a json if supported
+                # Here we use the underlying garth session tokens
+                if hasattr(self.client, "garth") and hasattr(self.client.garth, "dumps"):
+                    session_json = self.client.garth.dumps()
+                    with open(session_path, 'w') as f:
+                        json.dump(session_json, f)
+            except Exception as se:
+                print(f"Erreur sauvegarde session: {se}")
+            
             return True, "Connexion réussie"
         except Exception as e:
             return False, str(e)

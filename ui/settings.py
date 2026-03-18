@@ -58,6 +58,22 @@ def render_settings_tab(get_data_manager_func):
                 if 'garmin_client' in st.session_state: del st.session_state['garmin_client']
                 st.success("Identifiants supprimés du disque.")
                 st.rerun()
+            
+            st.divider()
+            st.subheader("🚪 Déconnexion de l'Application")
+            if st.button("🔴 Se déconnecter (Effacer session)", use_container_width=True):
+                # Script pour effacer localStorage
+                st.markdown("""
+                    <script>
+                    localStorage.removeItem("garmin_stats_auth_token");
+                    const url = new URL(window.location.href);
+                    url.searchParams.delete("remember");
+                    url.searchParams.set("logout", "true");
+                    window.location.href = url.toString();
+                    </script>
+                """, unsafe_allow_html=True)
+                st.session_state['authenticated'] = False
+                st.rerun()
 
     with col_data:
         st.subheader("💾 Gestion du Cache")

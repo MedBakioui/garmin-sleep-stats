@@ -23,22 +23,6 @@ st.set_page_config(
 # --- CUSTOM CSS FOR PREMIUM UI ---
 inject_custom_css()
 
-# --- GARMIN CLIENT INITIALIZATION ---
-if 'garmin_client' not in st.session_state:
-    creds = load_credentials()
-    if creds:
-        try:
-            client = GarminClient(creds['email'], creds['password'])
-            success, message = client.connect()
-            if success:
-                st.session_state['garmin_client'] = client
-            else:
-                st.sidebar.error(f"Erreur Garmin : {message}")
-        except Exception as e:
-            st.sidebar.error(f"Erreur : {e}")
-
-# --- MAIN NAVIGATION ---
-
 # --- MAIN NAVIGATION ---
 
 def check_auth():
@@ -73,10 +57,16 @@ if 'garmin_client' not in st.session_state:
         st.session_state['auto_login_done'] = True
         client = GarminClient(creds['email'], creds['password'])
         with st.spinner("Initialisation du profil Garmin..."):
-            success, _ = client.connect()
+            success, message = client.connect()
             if success:
                 st.session_state['garmin_client'] = client
                 st.toast("✅ Profil Garmin chargé automatiquement")
+            else:
+                if "429" in message or "Rate limit" in message:
+                    st.error("⚠️ **Garmin : Trop de tentatives de connexion.**")
+                    st.info("Garmin a temporairement bloqué les accès (Erreur 429). **Veuillez patienter 15 à 30 minutes** sans rafraîchir la page, puis réessayez.")
+                else:
+                    st.error(f"Erreur de connexion Garmin : {message}")
 
 tab_obj, tab_stat, tab_journal, tab_doc, tab_ai, tab_settings = st.tabs(["🎯 Objectifs", "📊 Statistiques", "📓 Journal", "📘 Guide", "💬 Coach IA", "⚙️ Réglages"])
 
