@@ -80,7 +80,6 @@ def render_login():
                                 if totp.verify(code2.strip()):
                                     # Si Remember Me était coché, on persiste le token dans le navigateur via un Cookie
                                     if st.session_state.get('remember_me', False):
-                                        cookie_manager = get_cookie_manager()
                                         cookie_manager.set("garmin_stats_auth_token", login_token, expires_at=datetime.datetime.now() + datetime.timedelta(days=365))
                                         st.session_state['login_success_wait'] = True
                                         st.rerun()
