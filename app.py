@@ -46,17 +46,24 @@ def check_auth():
         st.session_state['authenticated'] = False
 
     if not st.session_state['authenticated']:
-        # --- CSS PREMIUM LOGIN ---
+        # --- CSS EPIC & PRO LOGIN ---
         st.markdown("""
             <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap');
             
-            /* Fond global immersif */
+            /* Fond global avec animation subtile */
             .stApp {
-                background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%) !important;
+                background: radial-gradient(circle at 15% 50%, #1e1b4b 0%, #020617 50%, #0f172a 100%) !important;
+                background-size: 200% 200% !important;
+                animation: gradientPulse 15s ease infinite !important;
+            }
+            @keyframes gradientPulse {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
             }
             
-            /* Centrage absolu en ignorant les marges de Streamlit */
+            /* Conteneur principal absolu */
             [data-testid="block-container"] {
                 padding: 0 !important;
                 display: flex;
@@ -65,106 +72,159 @@ def check_auth():
                 align-items: center;
                 min-height: 100vh;
                 max-width: 100% !important;
+                position: relative;
             }
 
+            /* La "Carte de Verre" Principale */
             .login-container {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                padding: 50px 40px;
-                background: rgba(30, 41, 59, 0.4);
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
-                border-radius: 24px;
-                border: 1px solid rgba(255, 255, 255, 0.05);
-                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                padding: 60px 50px;
+                background: rgba(15, 23, 42, 0.45);
+                backdrop-filter: blur(24px) saturate(180%);
+                -webkit-backdrop-filter: blur(24px) saturate(180%);
+                border-radius: 30px;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                box-shadow: 
+                    0 30px 60px -15px rgba(0, 0, 0, 0.7),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
                 width: 100%;
-                max-width: 420px;
+                max-width: 480px;
                 text-align: center;
                 z-index: 10;
+                transform: translateY(0);
+                animation: floatIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             }
-            .login-title {
-                font-family: 'Inter', sans-serif;
-                font-size: 2.2rem;
-                font-weight: 800;
-                background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                margin-bottom: 8px;
-                letter-spacing: -0.5px;
-            }
-            .login-subtitle {
-                font-family: 'Inter', sans-serif;
-                color: #94a3b8;
-                font-size: 0.95rem;
-                margin-bottom: 40px;
-                font-weight: 400;
-            }
-            
-            /* Inputs Premium */
-            div[data-baseweb="input"] {
-                background-color: rgba(15, 23, 42, 0.6) !important;
-                border: 1px solid rgba(255, 255, 255, 0.1) !important;
-                border-radius: 12px !important;
-                transition: all 0.3s ease;
-            }
-            div[data-baseweb="input"]:focus-within {
-                border-color: #6366f1 !important;
-                box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
-            }
-            div[data-baseweb="input"] input {
-                color: white !important;
-                font-family: 'Inter', sans-serif !important;
-                padding: 12px 16px !important;
-            }
-            div[data-baseweb="input"] input::placeholder {
-                color: #64748b !important;
-            }
-            
-            /* Bouton Gradient & Glow */
-            div[data-testid="stButton"] button {
-                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
-                color: white !important;
-                border: none !important;
-                padding: 14px !important;
-                border-radius: 12px !important;
-                font-family: 'Inter', sans-serif !important;
-                font-weight: 600 !important;
-                font-size: 1rem !important;
-                letter-spacing: 0.5px !important;
-                transition: all 0.3s ease !important;
-                margin-top: 10px !important;
-                width: 100% !important;
-            }
-            div[data-testid="stButton"] button:hover {
-                transform: translateY(-2px) !important;
-                box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4) !important;
-            }
-            div[data-testid="stButton"] button:active {
-                transform: translateY(0) !important;
+            @keyframes floatIn {
+                0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+                100% { opacity: 1; transform: translateY(0) scale(1); }
             }
 
-            /* Cacher Streamlit par défaut */
+            /* Typographie Titre */
+            .login-title {
+                font-family: 'Outfit', sans-serif;
+                font-size: 2.8rem;
+                font-weight: 900;
+                background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                margin-bottom: 5px;
+                letter-spacing: -1px;
+                line-height: 1.1;
+                filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.5));
+            }
+            
+            /* Sous-titre élégant */
+            .login-subtitle {
+                font-family: 'Outfit', sans-serif;
+                color: #8b5cf6;
+                font-size: 1.05rem;
+                margin-bottom: 45px;
+                font-weight: 500;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+            }
+            
+            /* Zone de saisie Hyper Moderne */
+            div[data-baseweb="input"] {
+                background: rgba(0, 0, 0, 0.3) !important;
+                border: 1px solid rgba(255, 255, 255, 0.07) !important;
+                border-radius: 16px !important;
+                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                padding: 4px !important;
+            }
+            div[data-baseweb="input"]:focus-within {
+                background: rgba(15, 23, 42, 0.8) !important;
+                border-color: #8b5cf6 !important;
+                box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15) !important;
+                transform: translateY(-2px);
+            }
+            div[data-baseweb="input"] input {
+                color: #f8fafc !important;
+                font-family: 'Outfit', sans-serif !important;
+                font-weight: 500 !important;
+                font-size: 1.2rem !important;
+                letter-spacing: 6px !important; /* Espacement pour les pastilles du mot de passe */
+                text-align: center !important;
+                padding: 14px !important;
+            }
+            div[data-baseweb="input"] input::placeholder {
+                color: #475569 !important;
+                letter-spacing: 2px !important;
+                font-size: 1rem !important;
+            }
+            
+            /* Bouton "Niveau Cyber" */
+            div[data-testid="stButton"] button {
+                background: linear-gradient(135deg, #4f46e5 0%, #a855f7 50%, #ec4899 100%) !important;
+                background-size: 200% auto !important;
+                color: white !important;
+                border: none !important;
+                padding: 16px !important;
+                border-radius: 16px !important;
+                font-family: 'Outfit', sans-serif !important;
+                font-weight: 700 !important;
+                font-size: 1.1rem !important;
+                letter-spacing: 1.5px !important;
+                text-transform: uppercase !important;
+                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+                margin-top: 15px !important;
+                width: 100% !important;
+                box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.6) !important;
+            }
+            div[data-testid="stButton"] button:hover {
+                background-position: right center !important;
+                transform: translateY(-4px) !important;
+                box-shadow: 0 20px 40px -10px rgba(168, 85, 247, 0.8) !important;
+            }
+            div[data-testid="stButton"] button:active {
+                transform: translateY(1px) !important;
+                box-shadow: 0 5px 15px -5px rgba(168, 85, 247, 0.5) !important;
+            }
+
+            /* Cacher Streamlit Native UI */
             header[data-testid="stHeader"] {display: none !important;}
             #MainMenu {display: none !important;}
             footer {display: none !important;}
             .stDeployButton {display: none !important;}
+            .stApp > header {background-color: transparent !important;}
+            
+            /* Cacher les icônes d'oeil du mot de passe si on veut un look hyper clean */
+            div[data-baseweb="input"] svg {
+                color: #64748b !important;
+                margin-right: 10px;
+            }
             </style>
         """, unsafe_allow_html=True)
 
         if 'ACCESS_CODE' in st.secrets:
+            # Injection via HTML pour garantir l'imbrication correcte (Streamlit peut parfois diviser les appels markdown)
+            html_content = """
+            <div class="login-container">
+                <div class="login-title">Garmin Stats</div>
+                <div class="login-subtitle">Biohacking Dashboard</div>
+            </div>
+            """
+            
+            # Pour insérer les inputs Streamlit à L'INTÉRIEUR du conteneur visuel, 
+            # nous utilisons des colonnes fictives pour forcer Streamlit à générer des div propres,
+            # mais l'approche la plus stable en Streamlit est de wrapper via markdown.
+            
+            # Hack Streamlit : on crée l'illusion du conteneur.
             st.markdown('<div class="login-container">', unsafe_allow_html=True)
-            st.markdown('<div class="login-title">🌙 Garmin Sleep Stats</div>', unsafe_allow_html=True)
-            st.markdown('<div class="login-subtitle">Accès sécurisé à votre tableau de bord biologique</div>', unsafe_allow_html=True)
+            st.markdown('<div class="login-title">Garmin Stats</div>', unsafe_allow_html=True)
+            st.markdown('<div class="login-subtitle">BIOHACKING DASHBOARD</div>', unsafe_allow_html=True)
             
-            entered_code = st.text_input("Code d'accès", type="password", placeholder="••••", label_visibility="collapsed")
+            entered_code = st.text_input("Code", type="password", placeholder="CODE D'ACCÈS", label_visibility="collapsed")
             
-            if st.button("DÉVERROUILLER", type="primary", use_container_width=True):
+            st.markdown('<div style="height: 10px;"></div>', unsafe_allow_html=True)
+            if st.button("DÉMARRER LA SESSION", type="primary", use_container_width=True):
                 if entered_code == st.secrets['ACCESS_CODE']:
                     st.session_state['authenticated'] = True
                     st.rerun()
                 else:
-                    st.error("Code incorrect.")
+                    st.error("Accès Refusé.")
             
             st.markdown('</div>', unsafe_allow_html=True)
             st.stop()
