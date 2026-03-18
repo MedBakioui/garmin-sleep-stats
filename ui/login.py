@@ -91,24 +91,23 @@ def render_login():
                                     st.error("Code 2FA invalide ou expiré.")
                             except Exception as e:
                                 st.error(f"Erreur technique 2FA : {e}")
-            
-            # Aide & QR Code
-            with st.expander("Configurer Google Authenticator"):
-                if totp_secret:
-                    provisioning_uri = pyotp.totp.TOTP(totp_secret).provisioning_uri(name="Utilisateur", issuer_name="Garmin Stats")
-                    qr = qrcode.QRCode(version=1, box_size=10, border=4)
-                    qr.add_data(provisioning_uri)
-                    qr.make(fit=True)
-                    img = qr.make_image(fill_color="black", back_color="white")
-                    buf = BytesIO()
-                    img.save(buf, format="PNG")
-                    st.image(buf.getvalue(), caption="Scannez avec votre téléphone", width=200)
-                else:
-                    st.error("Secret TOTP introuvable.")
-            
-            if st.button("← Retour"):
-                st.session_state['login_step'] = 1
-                st.rerun()
+                # Aide & QR Code
+                with st.expander("Configurer Google Authenticator"):
+                    if totp_secret:
+                        provisioning_uri = pyotp.totp.TOTP(totp_secret).provisioning_uri(name="Utilisateur", issuer_name="Garmin Stats")
+                        qr = qrcode.QRCode(version=1, box_size=10, border=4)
+                        qr.add_data(provisioning_uri)
+                        qr.make(fit=True)
+                        img = qr.make_image(fill_color="black", back_color="white")
+                        buf = BytesIO()
+                        img.save(buf, format="PNG")
+                        st.image(buf.getvalue(), caption="Scannez avec votre téléphone", width=200)
+                    else:
+                        st.error("Secret TOTP introuvable.")
+                
+                if st.button("← Retour"):
+                    st.session_state['login_step'] = 1
+                    st.rerun()
         
         st.divider()
         st.caption("Sécurité TOTP active. En cochant 'Se souvenir de moi', une clé est enregistrée dans votre navigateur.")
