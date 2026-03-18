@@ -2,34 +2,30 @@ import streamlit as st
 import pyotp
 import qrcode
 from io import BytesIO
+import extra_streamlit_components as stx
+import datetime
+
+@st.cache_resource(experimental_allow_widgets=True)
+def get_cookie_manager():
+    return stx.CookieManager()
 
 def render_login():
     """Affiche une page de connexion native avec Authentification TOTP (Google Authenticator) et QR Code."""
     
-    # --- LOGIQUE REMEMBER ME (LOCAL STORAGE) ---
+    # --- LOGIQUE REMEMBER ME (COOKIES) ---
     login_token = st.secrets.get('ACCESS_CODE', 'default_token')
     
-    # Script JS pour détecter s'il y a un token sauvegardé et rediriger
-    st.markdown(f"""
-        <script>
-        const token = "{login_token}";
-        const savedToken = localStorage.getItem("garmin_stats_auth_token");
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        // Si on a un token et qu'on n'est pas déjà en train de se déconnecter
-        if (savedToken === token && !urlParams.has("logout") && !urlParams.has("remember")) {{
-            // On ajoute le paramètre 'remember' à l'URL et on recharge
-            urlParams.set("remember", token);
-            window.location.search = urlParams.toString();
-        }}
-        </script>
-    """, unsafe_allow_html=True)
+    cookie_manager = get_cookie_manager()
+    saved_token = cookie_manager.get(cookie="garmin_stats_auth_token")
 
-    # Récupération automatique si le paramètre remember est présent
+    if saved_token == login_token:
+        st.session_state['authenticated'] = True
+        st.rerun()
+
     if st.query_params.get("remember") == login_token:
         st.session_state['authenticated'] = True
-        # On peut aussi sauvegarder dans localStorage ici par sécurité
-        st.markdown(f'<script>localStorage.setItem("garmin_stats_auth_token", "{login_token}");</script>', unsafe_allow_html=True)
+        cookie_manager.set("garmin_stats_auth_token", login_token, expires_at=datetime.datetime.now() + datetime.timedelta(days=365))
+        st.rerun()
 
     # Initialisation de l'état de l'authentification
     if 'login_step' not in st.session_state:
@@ -75,10 +71,10 @@ def render_login():
                             totp = pyotp.TOTP(totp_secret)
                             if totp.verify(code2.strip()):
                                 st.session_state['authenticated'] = True
-                                # Si Remember Me était coché, on persiste le token dans le navigateur
+                                # Si Remember Me était coché, on persiste le token dans le navigateur via un Cookie
                                 if st.session_state.get('remember_me', False):
-                                    st.query_params["remember"] = login_token
-                                    st.markdown(f'<script>localStorage.setItem("garmin_stats_auth_token", "{login_token}");</script>', unsafe_allow_html=True)
+                                    cookie_manager = get_cookie_manager()
+                                    cookie_manager.set("garmin_stats_auth_token", login_token, expires_at=datetime.datetime.now() + datetime.timedelta(days=365))
                                 
                                 st.session_state['login_step'] = 1
                                 st.rerun()
