@@ -63,6 +63,21 @@ def check_auth():
 
 check_auth()
 
+# --- AUTO-LOGIN GARMIN (SI SECRETS PRESENTS) ---
+if 'garmin_client' not in st.session_state:
+    from utils import load_credentials
+    from garmin_client import GarminClient
+    creds = load_credentials()
+    # On ne tente l'auto-login au démarrage que si on a des secrets (pour le Cloud)
+    if creds and 'auto_login_done' not in st.session_state:
+        st.session_state['auto_login_done'] = True
+        client = GarminClient(creds['email'], creds['password'])
+        with st.spinner("Initialisation du profil Garmin..."):
+            success, _ = client.connect()
+            if success:
+                st.session_state['garmin_client'] = client
+                st.toast("✅ Profil Garmin chargé automatiquement")
+
 tab_obj, tab_stat, tab_journal, tab_doc, tab_ai, tab_settings = st.tabs(["🎯 Objectifs", "📊 Statistiques", "📓 Journal", "📘 Guide", "💬 Coach IA", "⚙️ Réglages"])
 
 # Fonction pour initialiser/récupérer le DataManager

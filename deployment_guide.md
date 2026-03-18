@@ -11,6 +11,11 @@ Ce guide explique comment déployer votre application sur **Streamlit Community 
     *   Dans les paramètres de l'application sur Streamlit Cloud, allez dans **Secrets**.
     *   Copiez-collez le contenu de votre fichier `.streamlit/secrets.toml` local.
     *   Ajoutez également votre clé DeepSeek : `DEEPSEEK_KEY = "votre_cle_ici"`.
+    *   **Optionnel (Connexion Auto)** : Pour ne plus avoir à vous connecter manuellement à Garmin, ajoutez :
+        ```toml
+        GARMIN_EMAIL = "votre@email.com"
+        GARMIN_PASSWORD = "votre_mot_de_passe"
+        ```
 
 ## Option 2 : Déploiement Docker (Auto-hébergé)
 

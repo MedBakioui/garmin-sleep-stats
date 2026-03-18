@@ -131,11 +131,23 @@ def inject_custom_css() -> None:
 
 
 def load_credentials() -> Optional[Dict[str, str]]:
-    """Loads user credentials from the local file.
+    """Loads user credentials from secrets or local file.
+    
+    Priority:
+    1. Streamlit Secrets (for cloud deployment)
+    2. Local credentials.json (for local development)
 
     Returns:
         Optional[Dict[str, str]]: A dictionary containing 'email' and 'password' if found, None otherwise.
     """
+    # 1. Check Streamlit Secrets
+    if 'GARMIN_EMAIL' in st.secrets and 'GARMIN_PASSWORD' in st.secrets:
+        return {
+            "email": st.secrets['GARMIN_EMAIL'],
+            "password": st.secrets['GARMIN_PASSWORD']
+        }
+
+    # 2. Check local file
     if os.path.exists(CREDENTIALS_FILE):
         try:
             with open(CREDENTIALS_FILE, "r") as f:

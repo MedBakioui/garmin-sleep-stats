@@ -10,6 +10,19 @@ def render_settings_tab(get_data_manager_func):
     with col_auth:
         st.subheader("🔑 Connexion Garmin")
 
+        # Initialisation : Tentative de connexion auto si non connecté
+        if 'garmin_client' not in st.session_state:
+            creds = load_credentials()
+            if creds and 'auto_login_attempted' not in st.session_state:
+                st.session_state['auto_login_attempted'] = True
+                client = GarminClient(creds['email'], creds['password'])
+                with st.spinner("Connexion automatique à Garmin..."):
+                    success, message = client.connect()
+                if success:
+                    st.session_state['garmin_client'] = client
+                    st.toast("🚀 Connexion automatique réussie !", icon="✅")
+                    st.rerun()
+
         # Formulaire de connexion ou État connecté
         if 'garmin_client' not in st.session_state:
             with st.form("garmin_login_form"):
