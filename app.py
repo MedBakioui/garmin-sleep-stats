@@ -49,39 +49,106 @@ def check_auth():
         # --- CSS PREMIUM LOGIN ---
         st.markdown("""
             <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+            
+            /* Fond global immersif */
+            .stApp {
+                background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%) !important;
+            }
+            
+            /* Centrage absolu en ignorant les marges de Streamlit */
+            [data-testid="block-container"] {
+                padding: 0 !important;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                max-width: 100% !important;
+            }
+
             .login-container {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: center;
-                padding: 40px;
-                background: rgba(15, 23, 42, 0.4);
+                padding: 50px 40px;
+                background: rgba(30, 41, 59, 0.4);
                 backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
                 border-radius: 24px;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-                max-width: 450px;
-                margin: 100px auto;
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                width: 100%;
+                max-width: 420px;
                 text-align: center;
+                z-index: 10;
             }
             .login-title {
                 font-family: 'Inter', sans-serif;
-                font-size: 2rem;
+                font-size: 2.2rem;
                 font-weight: 800;
-                background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+                background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
-                margin-bottom: 10px;
+                margin-bottom: 8px;
+                letter-spacing: -0.5px;
             }
             .login-subtitle {
+                font-family: 'Inter', sans-serif;
                 color: #94a3b8;
-                font-size: 0.9rem;
-                margin-bottom: 30px;
+                font-size: 0.95rem;
+                margin-bottom: 40px;
+                font-weight: 400;
             }
-            /* Masquer le header Streamlit sur le login */
-            header {visibility: hidden;}
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
+            
+            /* Inputs Premium */
+            div[data-baseweb="input"] {
+                background-color: rgba(15, 23, 42, 0.6) !important;
+                border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                border-radius: 12px !important;
+                transition: all 0.3s ease;
+            }
+            div[data-baseweb="input"]:focus-within {
+                border-color: #6366f1 !important;
+                box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+            }
+            div[data-baseweb="input"] input {
+                color: white !important;
+                font-family: 'Inter', sans-serif !important;
+                padding: 12px 16px !important;
+            }
+            div[data-baseweb="input"] input::placeholder {
+                color: #64748b !important;
+            }
+            
+            /* Bouton Gradient & Glow */
+            div[data-testid="stButton"] button {
+                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+                color: white !important;
+                border: none !important;
+                padding: 14px !important;
+                border-radius: 12px !important;
+                font-family: 'Inter', sans-serif !important;
+                font-weight: 600 !important;
+                font-size: 1rem !important;
+                letter-spacing: 0.5px !important;
+                transition: all 0.3s ease !important;
+                margin-top: 10px !important;
+                width: 100% !important;
+            }
+            div[data-testid="stButton"] button:hover {
+                transform: translateY(-2px) !important;
+                box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4) !important;
+            }
+            div[data-testid="stButton"] button:active {
+                transform: translateY(0) !important;
+            }
+
+            /* Cacher Streamlit par défaut */
+            header[data-testid="stHeader"] {display: none !important;}
+            #MainMenu {display: none !important;}
+            footer {display: none !important;}
+            .stDeployButton {display: none !important;}
             </style>
         """, unsafe_allow_html=True)
 
