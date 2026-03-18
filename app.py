@@ -47,22 +47,28 @@ def check_auth():
 
 check_auth()
 
-# --- AUTO-LOGIN GARMIN (SI SECRETS PRESENTS) ---
+# --- FONCTION DE CACHE POUR LE CLIENT GARMIN ---
+@st.cache_resource(show_spinner=False)
+def get_cached_garmin_client(email, password):
+    from garmin_client import GarminClient
+    client = GarminClient(email, password)
+    success, message = client.connect()
+    return client, success, message
+
+# --- AUTO-LOGIN GARMIN ---
 if 'garmin_client' not in st.session_state:
     from utils import load_credentials
-    from garmin_client import GarminClient
     creds = load_credentials()
     # On ne tente l'auto-login au démarrage que si on a des secrets (pour le Cloud)
     if creds and 'auto_login_done' not in st.session_state:
         st.session_state['auto_login_done'] = True
-        client = GarminClient(creds['email'], creds['password'])
         with st.spinner("Initialisation du profil Garmin..."):
-            success, message = client.connect()
+            client, success, message = get_cached_garmin_client(creds['email'], creds['password'])
             if success:
                 st.session_state['garmin_client'] = client
                 st.toast("✅ Profil Garmin chargé automatiquement")
             else:
-                if "429" in message or "Rate limit" in message:
+                if "429" in message or "Rate limit" in message or "Too Many Requests" in message:
                     st.error("⚠️ **Garmin : Trop de tentatives de connexion.**")
                     st.info("Garmin a temporairement bloqué les accès (Erreur 429). **Veuillez patienter 15 à 30 minutes** sans rafraîchir la page, puis réessayez.")
                 else:
