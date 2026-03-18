@@ -15,7 +15,18 @@ def render_login():
     login_token = st.secrets.get('ACCESS_CODE', 'default_token')
     
     cookie_manager = get_cookie_manager()
-    saved_token = cookie_manager.get(cookie="garmin_stats_auth_token")
+    
+    # 1. Lecture native et synchrone (Streamlit 1.30+)
+    saved_token = None
+    if hasattr(st, 'context') and hasattr(st.context, 'cookies'):
+        saved_token = st.context.cookies.get("garmin_stats_auth_token")
+    
+    # 2. Fallback via le composant (Asynchrone)
+    if not saved_token:
+        try:
+            saved_token = cookie_manager.get(cookie="garmin_stats_auth_token")
+        except:
+            pass
 
     if saved_token == login_token:
         st.session_state['authenticated'] = True
