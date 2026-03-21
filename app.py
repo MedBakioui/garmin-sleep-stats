@@ -86,10 +86,15 @@ if 'garmin_client' not in st.session_state:
                     else:
                         st.info("Aucun fichier de session trouvé.")
 
-    # On ne tente l'auto-login au démarrage que si on a des secrets et pas de verrouillage
-    if creds and not is_locked and 'auto_login_done' not in st.session_state:
+    # On ne tente l'auto-login au démarrage que si :
+    # 1. On a des identifiants
+    # 2. ET (On n'est pas verrouillé OU on a un jeton de session pour contourner le verrouillage)
+    # 3. ET On n'a pas déjà fait l'auto-login dans cette session Streamlit
+    has_session_token = creds and creds.get('session')
+    
+    if creds and (not is_locked or has_session_token) and 'auto_login_done' not in st.session_state:
         st.session_state['auto_login_done'] = True
-        with st.spinner("Initialisation du profil Garmin..."):
+        with st.spinner("🚀 Restauration de votre session Garmin..." if has_session_token else "Initialisation du profil Garmin..."):
             client, success, message = get_cached_garmin_client(creds['email'], creds['password'], creds.get('session'))
             if success:
                 st.session_state['garmin_client'] = client
