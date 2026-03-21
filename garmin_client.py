@@ -2,6 +2,8 @@ import datetime
 from datetime import date
 from typing import List, Dict, Any, Optional, Tuple, Union
 import time
+import base64
+import json
 from garminconnect import Garmin
 import pandas as pd
 
@@ -41,18 +43,29 @@ class GarminClient:
             
             # Priorité absolue: Session issue des Streamlit Secrets
             if self.session_token:
+                import streamlit as st
+                st.info("Tentative de restauration via GARMIN_SESSION...")
+                token_str = self.session_token.strip().strip("'").strip('"')
+                
+                # Détection et décodage Base64 si nécessaire
                 try:
-                    # Si c'est correctement encastré dans des guillemets JSON
-                    session_data = json.loads(self.session_token)
-                except json.JSONDecodeError:
-                    # Le texte collé n'a pas de guillemets, on prend la chaine brute
-                    session_data = self.session_token.strip().strip("'").strip('"')
+                    # On tente de voir si c'est du Base64 qui commence par '[' (W3s...)
+                    if token_str.startswith('W3s'):
+                        import base64
+                        decoded_bytes = base64.b64decode(token_str)
+                        session_data = json.loads(decoded_bytes.decode('utf-8'))
+                    else:
+                        # Sinon on tente un JSON direct
+                        session_data = json.loads(token_str)
+                except Exception:
+                    # Si tout échoue, on garde la chaine brute
+                    session_data = token_str
 
                 try:
                     self.client.login(tokenstore=session_data)
                     return True, "Session restaurée (Secrets)"
                 except Exception as e:
-                    return False, f"Le jeton GARMIN_SESSION est invalide ou expiré. Impossible de contourner le blocage IP. Erreur: {e}"
+                    return False, f"Le jeton GARMIN_SESSION est invalide ou expiré. Erreur: {e}"
             
             # Tentative de chargement d'une session existante
             if os.path.exists(session_path):
