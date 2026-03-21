@@ -1,6 +1,7 @@
 import datetime
 from datetime import date
 from typing import List, Dict, Any, Optional, Tuple, Union
+import time
 from garminconnect import Garmin
 import pandas as pd
 
@@ -113,10 +114,21 @@ class GarminClient:
             
             current_date = start_date
             while current_date <= end_date:
+                # Politesse pour éviter le 429
+                if current_date > start_date:
+                    time.sleep(1.5)
+                
                 # get_sleep_data renvoie les détails pour un jour spécifique
-                data = self.client.get_sleep_data(current_date.isoformat())
-                if data:
-                    all_data.append(data)
+                try:
+                    data = self.client.get_sleep_data(current_date.isoformat())
+                    if data:
+                        all_data.append(data)
+                except Exception as e:
+                    if "429" in str(e) or "Too Many Requests" in str(e):
+                        print(f"Rate limit hit at {current_date}")
+                        raise Exception("Garmin Rate Limit (429): Trop de requêtes. Veuillez patienter.")
+                    print(f"Erreur pour {current_date}: {e}")
+                
                 current_date += datetime.timedelta(days=1)
                 
             return all_data
@@ -190,6 +202,10 @@ class GarminClient:
         data: List[Dict[str, Any]] = []
         current = start_date
         while current <= end_date:
+            # Politesse
+            if current > start_date:
+                time.sleep(1.2)
+                
             try:
                 # get_user_summary renvoie un JSON complet pour la journée
                 summary = self.client.get_user_summary(current.isoformat())
@@ -203,8 +219,11 @@ class GarminClient:
                         'body_battery_min': summary.get('minBodyBattery')
                     }
                     data.append(rec)
-            except Exception:
-                pass # Ignorer silencieusement les erreurs d'un jour spécifique
+            except Exception as e:
+                if "429" in str(e) or "Too Many Requests" in str(e):
+                    print(f"Rate limit hit at {current}")
+                    raise Exception("Garmin Rate Limit (429): Trop de requêtes. Veuillez patienter.")
+                pass # Ignorer silencieusement les autres erreurs d'un jour spécifique
             current += datetime.timedelta(days=1)
             
         df = pd.DataFrame(data)

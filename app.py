@@ -59,23 +59,39 @@ def get_cached_garmin_client(email, password, session_token=None):
 if 'garmin_client' not in st.session_state:
     from utils import load_credentials
     creds = load_credentials()
-    # On ne tente l'auto-login au démarrage que si on a des secrets (pour le Cloud)
-    if creds and 'auto_login_done' not in st.session_state:
+    
+    # Vérification du verrouillage temporaire (429)
+    is_locked = False
+    if 'last_429_time' in st.session_state:
+        elapsed = (datetime.datetime.now() - st.session_state['last_429_time']).total_seconds()
+        if elapsed < 900: # 15 minutes
+            is_locked = True
+            remaining = int((900 - elapsed) / 60)
+            st.error("⚠️ **Garmin : Accès temporairement bloqués (429).**")
+            st.info(f"Veuillez patienter encore environ **{remaining} minutes** avant de tenter une nouvelle connexion.")
+            if st.button("Réessayer maintenant (déconseillé)"):
+                del st.session_state['last_429_time']
+                st.rerun()
+
+    # On ne tente l'auto-login au démarrage que si on a des secrets et pas de verrouillage
+    if creds and not is_locked and 'auto_login_done' not in st.session_state:
         st.session_state['auto_login_done'] = True
         with st.spinner("Initialisation du profil Garmin..."):
             client, success, message = get_cached_garmin_client(creds['email'], creds['password'], creds.get('session'))
             if success:
                 st.session_state['garmin_client'] = client
                 st.toast("✅ Profil Garmin chargé automatiquement")
+                # On nettoie le flag 429 si la connexion réussit
+                if 'last_429_time' in st.session_state:
+                    del st.session_state['last_429_time']
             else:
-                # Si échec (ex: 429), on vide le cache pour que le prochain refresh retente la connexion
-                get_cached_garmin_client.clear()
-                
                 if "429" in message or "Rate limit" in message or "Too Many Requests" in message:
-                    st.error("⚠️ **Garmin : Trop de tentatives de connexion.**")
-                    st.info("Garmin a temporairement bloqué les accès (Erreur 429). **Veuillez patienter 15 à 30 minutes** sans rafraîchir la page, puis réessayez.")
+                    st.session_state['last_429_time'] = datetime.datetime.now()
+                    get_cached_garmin_client.clear()
+                    st.rerun() # Refresh pour afficher le message de verrouillage
                 else:
                     st.error(f"Erreur de connexion Garmin : {message}")
+                    get_cached_garmin_client.clear()
 
 tab_obj, tab_stat, tab_journal, tab_doc, tab_ai, tab_settings = st.tabs(["🎯 Objectifs", "📊 Statistiques", "📓 Journal", "📘 Guide", "💬 Coach IA", "⚙️ Réglages"])
 
@@ -86,14 +102,21 @@ def get_data_manager():
             dm = DataManager(st.session_state['garmin_client'])
             # --- AUTO-SYNC GLOBAL ---
             if 'global_sync_done' not in st.session_state:
-                with st.spinner("⚡ Synchronisation intelligente des données manquantes..."):
+                with st.spinner("⚡ Synchronisation intelligente des données manquantes (Prudence 429)..."):
                     try:
-                        results = dm.auto_sync_missing_days(window_days=90)
+                        # On réduit la fenêtre par défaut à 30 jours au lieu de 90 pour être moins agressif
+                        # mais on peut garder 90 si on gère bien l'interruption
+                        results = dm.auto_sync_missing_days(window_days=60)
                         st.session_state['global_sync_done'] = True
                         if results['synced'] > 0:
-                            st.toast(f"✅ {results['synced']} nuits synchronisées automatiquement !", icon="🌙")
+                            st.toast(f"✅ {results['synced']} nuits synchronisées !", icon="🌙")
                     except Exception as e:
-                        st.error(f"Erreur de synchro auto : {e}")
+                        if "429" in str(e):
+                            st.session_state['last_429_time'] = datetime.datetime.now()
+                            st.warning("⚠️ Sync interrompue : Garmin a limité les requêtes. Les données déjà récupérées sont sauvegardées.")
+                            st.session_state['global_sync_done'] = True # On marque quand même comme "fait" pour ne pas reboucler
+                        else:
+                            st.error(f"Erreur de synchro auto : {e}")
             st.session_state['data_manager'] = dm
         return st.session_state['data_manager']
     return None

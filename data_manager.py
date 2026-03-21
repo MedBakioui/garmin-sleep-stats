@@ -1,6 +1,7 @@
 import json
 import os
 import datetime
+import time
 from datetime import date
 import pandas as pd
 from typing import List, Dict, Any, Optional, Union, Callable
@@ -132,6 +133,11 @@ class DataManager:
             total = len(needed_dates)
             for i, d in enumerate(needed_dates):
                 if progress_callback: progress_callback(i, total, "Sommeil")
+                
+                # Politesse : délai entre les jours si ce n'est pas le premier jour de la boucle
+                if i > 0:
+                    time.sleep(1.5)
+                    
                 try:
                     day_data_list = self.client.get_sleep_data(d, d)
                     if day_data_list:
@@ -140,6 +146,10 @@ class DataManager:
                         all_data.append(day_data)
                 except Exception as e:
                     print(f"Erreur sleep pour {d}: {e}")
+                    if "429" in str(e):
+                        # En cas de rate limit, on sauvegarde ce qu'on a déjà et on remonte l'erreur
+                        self._save_cache(self._sleep_cache, CACHE_FILE)
+                        raise e
             
             self._save_cache(self._sleep_cache, CACHE_FILE)
             if progress_callback: progress_callback(total, total, "Sommeil")
@@ -176,6 +186,11 @@ class DataManager:
             total = len(dates_to_fetch)
             for i, d in enumerate(dates_to_fetch):
                 if progress_callback: progress_callback(i, total, "Métriques")
+                
+                # Politesse
+                if i > 0:
+                    time.sleep(1.2)
+                    
                 try:
                     df_day = self.client.get_daily_metrics(d, d)
                     if not df_day.empty:
@@ -184,7 +199,10 @@ class DataManager:
                         rec['date'] = d.isoformat()
                         self._metrics_cache[d.isoformat()] = rec
                         data.append(rec)
-                except:
+                except Exception as e:
+                    if "429" in str(e):
+                        self._save_cache(self._metrics_cache, METRICS_CACHE_FILE)
+                        raise e
                     pass
             self._save_cache(self._metrics_cache, METRICS_CACHE_FILE)
             if progress_callback: progress_callback(total, total, "Métriques")
