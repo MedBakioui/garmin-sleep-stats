@@ -4,20 +4,38 @@ Ce guide explique comment déployer votre application sur **Streamlit Community 
 
 ## Option 1 : Streamlit Community Cloud (Gratuit & Simple)
 
-1.  **Hébergement Git** : Poussez votre code sur un dépôt GitHub (public ou privé).
-2.  **Connexion** : Allez sur [share.streamlit.io](https://share.streamlit.io/) et connectez votre compte GitHub.
-3.  **Nouveau App** : Sélectionnez votre dépôt, la branche (ex: `main`), et le fichier principal (`app.py`).
-4.  **Configuration des Secrets** (CRITIQUE) :
-    *   Dans les paramètres de l'application sur Streamlit Cloud, allez dans **Secrets**.
-    *   Copiez-collez le contenu de votre fichier `.streamlit/secrets.toml` local.
-    *   Ajoutez également votre clé DeepSeek : `DEEPSEEK_KEY = "votre_cle_ici"`.
-    *   **Optionnel (Connexion Auto)** : Pour ne plus avoir à vous connecter manuellement à Garmin, ajoutez :
+1. **Hébergement Git** : Poussez votre code sur un dépôt GitHub (public ou privé).
+2. **Connexion** : Allez sur [share.streamlit.io](https://share.streamlit.io/) et connectez votre compte GitHub.
+3. **Nouveau App** : Sélectionnez votre dépôt, la branche (ex: `main`), et le fichier principal (`app.py`).
+4. **Configuration des Secrets** (CRITIQUE) :
+
+    * **Dans les paramètres de l'application sur Streamlit Cloud, allez dans **Secrets**.
+    * **Copiez-collez le contenu de votre fichier `.streamlit/secrets.toml` local.
+    * **Ajoutez également votre clé DeepSeek : `DEEPSEEK_KEY = "votre_cle_ici"`.
+    * **Optionnel (Connexion Auto)** : Pour ne plus avoir à vous connecter manuellement à Garmin, ajoutez :
+
         ```toml
         GARMIN_EMAIL = "votre@email.com"
         GARMIN_PASSWORD = "votre_mot_de_passe"
         ```
 
-## Option 2 : Déploiement Docker (Auto-hébergé)
+## Option 2 : Railway (Recommandé pour éviter 429)
+
+Railway est excellent car il utilise des adresses IP moins "marquées" que Streamlit Cloud et supporte nativement Docker.
+
+1.  **Nouveau Projet** : Connectez votre GitHub sur [Railway.app](https://railway.app/).
+2.  **Déploiement** : Railway détectera automatiquement le `Dockerfile`.
+3.  **Variables d'Environnement** : Allez dans l'onglet **Variables** et ajoutez toutes vos clés (GARMIN_EMAIL, DEEPSEEK_KEY, etc.).
+4.  **Persistent Volume** : Pour sauvegarder vos données sans Supabase, allez dans **Settings > Volumes** et montez un dossier sur `/app/data`.
+
+## Option 3 : Render (Alternative gratuite)
+
+1.  **New Web Service** : Connectez GitHub sur [Render.com](https://render.com/).
+2.  **Runtime** : Sélectionnez **Docker**.
+3.  **Environment** : Ajoutez vos secrets dans l'onglet **Environment Variables**.
+4.  **Note** : Le mode gratuit s'endort après 15 min d'inactivité.
+
+## Option 4 : Déploiement Docker (Auto-hébergé)
 
 Si vous avez votre propre serveur avec Docker :
 
