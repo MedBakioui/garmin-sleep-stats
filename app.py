@@ -62,16 +62,27 @@ if 'garmin_client' not in st.session_state:
     
     # Vérification du verrouillage temporaire (429)
     is_locked = False
+    lock_duration = 1800 # 30 minutes de sécurité
     if 'last_429_time' in st.session_state:
         elapsed = (datetime.datetime.now() - st.session_state['last_429_time']).total_seconds()
-        if elapsed < 900: # 15 minutes
+        if elapsed < lock_duration:
             is_locked = True
-            remaining = int((900 - elapsed) / 60)
-            st.error("⚠️ **Garmin : Accès temporairement bloqués (429).**")
-            st.info(f"Veuillez patienter encore environ **{remaining} minutes** avant de tenter une nouvelle connexion.")
-            if st.button("Réessayer maintenant (déconseillé)"):
-                del st.session_state['last_429_time']
-                st.rerun()
+            remaining = int((lock_duration - elapsed) / 60)
+            st.error("⚠️ **Garmin : Accès bloqués (Erreur 429).**")
+            st.warning(f"Garmin a restreint votre IP. L'application est verrouillée pour encore **~{remaining} minutes** pour éviter une extension du bannissement.")
+            
+            c1, c2 = st.columns(2)
+            with c1:
+                if st.button("🔄 Tenter de forcer la reconnexion"):
+                    del st.session_state['last_429_time']
+                    st.rerun()
+            with c2:
+                if st.button("🗑️ Effacer la session locale"):
+                    if os.path.exists("garmin_session.json"):
+                        os.remove("garmin_session.json")
+                        st.success("Session effacée. Réessayez dans 15 minutes.")
+                    else:
+                        st.info("Aucun fichier de session trouvé.")
 
     # On ne tente l'auto-login au démarrage que si on a des secrets et pas de verrouillage
     if creds and not is_locked and 'auto_login_done' not in st.session_state:
