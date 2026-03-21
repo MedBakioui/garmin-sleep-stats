@@ -4,6 +4,7 @@ import qrcode
 from io import BytesIO
 import extra_streamlit_components as stx
 import datetime
+from secret_helper import get_secret
 
 def get_cookie_manager():
     return stx.CookieManager(key="garmin_cookies")
@@ -12,7 +13,7 @@ def render_login():
     """Affiche une page de connexion native avec Authentification TOTP (Google Authenticator) et QR Code."""
     
     # --- LOGIQUE REMEMBER ME (COOKIES) ---
-    login_token = st.secrets.get('ACCESS_CODE', 'default_token')
+    login_token = get_secret('ACCESS_CODE', 'default_token')
     
     cookie_manager = get_cookie_manager()
     
@@ -58,7 +59,7 @@ def render_login():
                 submit1 = st.form_submit_button("Continuer", use_container_width=True)
                 
                 if submit1:
-                    if code1 == st.secrets.get('ACCESS_CODE', ''):
+                    if code1 == get_secret('ACCESS_CODE'):
                         st.session_state['remember_me'] = remember_me
                         st.session_state['login_step'] = 2
                         st.rerun()
@@ -80,7 +81,7 @@ def render_login():
                 st.warning("Étape 2 : Entrez le code de votre application 2FA.")
                 
                 with st.form("form_step2"):
-                    totp_secret = st.secrets.get('TOTP_SECRET', '').strip()
+                    totp_secret = get_secret('TOTP_SECRET', '').strip()
                     code2 = st.text_input("Code 2FA (6 chiffres)", placeholder="Ex: 123456")
                     submit2 = st.form_submit_button("Vérifier", use_container_width=True)
                     

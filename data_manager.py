@@ -4,6 +4,7 @@ import datetime
 import time
 from datetime import date
 import pandas as pd
+from secret_helper import get_secret
 from typing import List, Dict, Any, Optional, Union, Callable
 from garmin_client import GarminClient
 
@@ -32,8 +33,9 @@ class DataManager:
         
         if SUPABASE_AVAILABLE:
             try:
-                url = st.secrets.get("SUPABASE_URL")
-                key = st.secrets.get("SUPABASE_KEY")
+                # 1. Check Secrets / Env Vars
+                url = get_secret("SUPABASE_URL")
+                key = get_secret("SUPABASE_KEY")
                 if url and key:
                     self.supabase = create_client(url, key)
             except:

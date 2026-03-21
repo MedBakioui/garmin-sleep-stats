@@ -1,6 +1,7 @@
 import streamlit as st
 import datetime
-import os
+import json
+from secret_helper import get_secret
 import pandas as pd
 from utils import inject_custom_css, load_settings, load_credentials, delete_credentials
 from data_manager import DataManager
@@ -37,7 +38,7 @@ def check_auth():
             render_login()
             
             # Message d'alerte si les secrets sont absents (cas courant de déploiement)
-            if 'ACCESS_CODE' not in st.secrets:
+            if not get_secret('ACCESS_CODE'):
                 st.warning("⚠️ ATTENTION : ACCESS_CODE non trouvé dans les Secrets. L'authentification ne fonctionnera pas tant que vous ne l'avez pas configurée.")
                 
             st.stop()
@@ -161,15 +162,16 @@ with tab_ai:
     
     col_k, col_info = st.columns([2, 1])
     with col_k:
-        if 'deepseek_key' not in st.session_state or not st.session_state['deepseek_key']:
-            # Priorité : Secrets Streamlit (pour le déploiement)
-            if 'DEEPSEEK_KEY' in st.secrets:
-                st.session_state['deepseek_key'] = st.secrets['DEEPSEEK_KEY']
-            # Secondaire : Fichier local (pour le dev)
-            elif os.path.exists("deepseek.key"):
-                with open("deepseek.key", "r") as f:
-                    st.session_state['deepseek_key'] = f.read().strip()
-            else:
+        # 1. Vérifie si une clé DeepSeek est configurée
+        deepseek_key = get_secret('DEEPSEEK_KEY')
+        if deepseek_key:
+            st.session_state['deepseek_key'] = deepseek_key
+        # Secondaire : Fichier local (pour le dev)
+        elif os.path.exists("deepseek.key"):
+            with open("deepseek.key", "r") as f:
+                st.session_state['deepseek_key'] = f.read().strip()
+        else:
+            if 'deepseek_key' not in st.session_state: # Initialize if not present
                 st.session_state['deepseek_key'] = ""
 
         api_input = st.text_input("Clé API DeepSeek", value=st.session_state['deepseek_key'], type="password", placeholder="sk-...")

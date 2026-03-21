@@ -2,6 +2,7 @@ import streamlit as st
 import json
 import os
 from typing import Optional, Dict, Any
+from secret_helper import get_secret
 
 CREDENTIALS_FILE = "credentials.json"
 SETTINGS_FILE = "settings.json"
@@ -140,12 +141,15 @@ def load_credentials() -> Optional[Dict[str, str]]:
     Returns:
         Optional[Dict[str, str]]: A dictionary containing 'email' and 'password' if found, None otherwise.
     """
-    # 1. Check Streamlit Secrets
-    if 'GARMIN_EMAIL' in st.secrets and 'GARMIN_PASSWORD' in st.secrets:
+    # 1. Check Secrets / Env Vars
+    email = get_secret('GARMIN_EMAIL')
+    password = get_secret('GARMIN_PASSWORD')
+    
+    if email and password:
         return {
-            "email": st.secrets['GARMIN_EMAIL'],
-            "password": st.secrets['GARMIN_PASSWORD'],
-            "session": st.secrets.get('GARMIN_SESSION')
+            "email": email,
+            "password": password,
+            "session": get_secret('GARMIN_SESSION')
         }
 
     # 2. Check local file
