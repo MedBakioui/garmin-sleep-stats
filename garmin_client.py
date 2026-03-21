@@ -41,39 +41,37 @@ class GarminClient:
         try:
             self.client = Garmin(self.email, self.password)
             
-            # Priorité absolue: Session issue des Streamlit Secrets
+            # Priorité: Si un jeton est fourni dans les Secrets/Env, on l'écrit sur le disque
             if self.session_token:
                 import streamlit as st
-                st.info("Tentative de restauration via GARMIN_SESSION...")
+                st.info("Préparation de la session via GARMIN_SESSION...")
                 token_str = self.session_token.strip().strip("'").strip('"')
                 
-                # Détection et décodage Base64 si nécessaire
                 try:
-                    # On tente de voir si c'est du Base64 qui commence par '[' (W3s...)
+                    # Décodage Base64 si nécessaire
                     if token_str.startswith('W3s'):
                         import base64
                         decoded_bytes = base64.b64decode(token_str)
-                        session_data = json.loads(decoded_bytes.decode('utf-8'))
+                        session_json = decoded_bytes.decode('utf-8')
+                        # On vérifie que c'est bien du JSON
+                        json.loads(session_json) 
                     else:
-                        # Sinon on tente un JSON direct
-                        session_data = json.loads(token_str)
-                except Exception:
-                    # Si tout échoue, on garde la chaine brute
-                    session_data = token_str
+                        # Sinon on assume que c'est déjà du JSON
+                        session_json = token_str
+                        json.loads(session_json)
 
-                try:
-                    self.client.login(tokenstore=session_data)
-                    return True, "Session restaurée (Secrets)"
-                except Exception as e:
-                    return False, f"Le jeton GARMIN_SESSION est invalide ou expiré. Erreur: {e}"
+                    # On écrit le fichier sur le disque pour que garth puisse le lire normalement
+                    with open(session_path, 'w') as f:
+                        f.write(session_json)
+                    st.success("Session synchronisée sur le disque.")
+                except Exception as de:
+                    st.error(f"Erreur lors de la préparation du jeton : {de}")
+                    # On continue pour tenter un login normal
             
             # Tentative de chargement d'une session existante
             if os.path.exists(session_path):
                 try:
-                    import json
-                    with open(session_path, 'r') as f:
-                        session_data = json.load(f)
-                    self.client.login(token_store=session_data)
+                    self.client.login(tokenstore=session_path)
                     return True, "Session restaurée"
                 except Exception:
                     # Si le token a expiré, on fait un login normal
