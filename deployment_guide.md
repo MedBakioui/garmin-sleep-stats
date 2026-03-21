@@ -28,12 +28,14 @@ Railway est excellent car il utilise des adresses IP moins "marquées" que Strea
 3.  **Variables d'Environnement** : Allez dans l'onglet **Variables** et ajoutez toutes vos clés (GARMIN_EMAIL, DEEPSEEK_KEY, etc.).
 4.  **Persistent Volume** : Pour sauvegarder vos données sans Supabase, allez dans **Settings > Volumes** et montez un dossier sur `/app/data`.
 
-## Option 3 : Render (Alternative gratuite)
+## Option 3 : Render (Gratuit et Privé)
 
-1.  **New Web Service** : Connectez GitHub sur [Render.com](https://render.com/).
-2.  **Runtime** : Sélectionnez **Docker**.
-3.  **Environment** : Ajoutez vos secrets dans l'onglet **Environment Variables**.
-4.  **Note** : Le mode gratuit s'endort après 15 min d'inactivité.
+1. **New Web Service** : Connectez GitHub sur [Render.com](https://render.com/).
+2. **Configuration** : Render utilisera le fichier `render.yaml` automatiquement.
+3. **Secret URL** : Lors de la création, choisissez un nom de service imprévisible (ex: `stats-sleep-88x2-xyz`). Cela rendra votre site "invisible" pour les inconnus.
+4. **Environment Variables** : Ajoutez vos secrets (GARMIN_EMAIL, GARMIN_PASSWORD, ACCESS_CODE, TOTP_SECRET) dans le dashboard Render.
+5. **Prévention 429** : **TRÈS IMPORTANT** : Une fois que vous avez réussi une première connexion, récupérez le contenu de `garmin_session.json` et ajoutez-le dans une variable `GARMIN_SESSION` sur Render. Cela évitera tout blocage futur.
+6. **Note** : Le mode gratuit s'endort après 15 min d'inactivité. Le premier chargement prendra ~30 secondes.
 
 ## Option 4 : Déploiement Docker (Auto-hébergé)
 

@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: garmin-sleep-stats
+    runtime: docker
+    plan: free # Change to starter if you want more RAM/No sleep
+    region: frankfurt # Or your preferred region
+    envVars:
+      - key: STREAMLIT_SERVER_PORT
+        value: 8501
+      - key: STREAMLIT_SERVER_HEADLESS
+        value: "true"
+      # Les secrets suivants doivent être ajoutés manuellement dans le dashboard Render
+      # pour plus de sécurité (ou générés via des "secret files")
+      - key: ACCESS_CODE
+        generateValue: true
+      - key: TOTP_SECRET
+        generateValue: true
+      - key: DEEPSEEK_KEY
+        sync: false
